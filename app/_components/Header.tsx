@@ -3,8 +3,8 @@ import { Button } from '@shadcnComponents/button';
 
 function Header() {
   return (
-    <div>
-      <div className='flex justify-between items-center'>
+    <header>
+      <div className='flex justify-between items-center shadow-sm p-4'>
         <Image
           src='/logo.png'
           alt='logo'
@@ -29,12 +29,12 @@ function Header() {
           </li>
         </ul>
 
-        <div className='flex gap-5 mr-4 shadow-sm'>
+        <div className='flex gap-5'>
           <Button variant='ghost'>Login</Button>
           <Button>Get Started</Button>
         </div>
       </div>
-    </div>
+    </header>
   );
 }
 

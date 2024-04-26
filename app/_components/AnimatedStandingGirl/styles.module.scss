@@ -1,0 +1,62 @@
+//Used to create dynamic name for keyframes
+@mixin keyframes($animName) {
+  @keyframes #{$animName} {
+    @content;
+  }
+}
+
+//Since keyframe name has to be unique, keyframes mixin is required
+@mixin moveAndDisapearMixin(
+  $animName,
+  $topStart: 300px,
+  $leftStart: 250px,
+  $topEnd,
+  $leftEnd,
+  $animationDelay: 0s,
+  $duration: 5s
+) {
+  @include keyframes($animName) {
+    0% {
+      opacity: 1;
+      top: $topStart;
+      left: $leftStart;
+    }
+    85% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      //Dynamic
+      top: $topEnd;
+      //Dynamic
+      left: $leftEnd;
+    }
+  }
+  animation: $animName $duration forwards infinite linear;
+  animation-delay: $animationDelay;
+}
+
+.particle {
+  position: absolute;
+}
+.particle1 {
+  @include moveAndDisapearMixin(particle1, 160px, 0px, 30px, 170px, 0s, 5s);
+  z-index: -1;
+}
+.particle2 {
+  @include moveAndDisapearMixin(particle2, 60px, 0px, 10px, 70px, 0s, 3s);
+}
+.particle3 {
+  @include moveAndDisapearMixin(particle3, 170px, 80px, 120px, 160px, 0s, 2s);
+  z-index: -1;
+}
+.particle4 {
+  @include moveAndDisapearMixin(particle4, 250px, 80px, 200px, 160px, 0s, 2s);
+}
+.particle5 {
+  @include moveAndDisapearMixin(particle5, 50px, 100px, 15px, 150px, 0s, 2s);
+  z-index: -1;
+}
+.particle6 {
+  @include moveAndDisapearMixin(particle6, 230px, 30px, 50px, 150px, 0s, 4.8s);
+}
