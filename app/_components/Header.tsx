@@ -1,5 +1,8 @@
+'use client';
+
 import Image from 'next/image';
 import { Button } from '@shadcnComponents/button';
+import { LoginLink, RegisterLink } from '@kinde-oss/kinde-auth-nextjs';
 
 function Header() {
   return (
@@ -30,8 +33,12 @@ function Header() {
         </ul>
 
         <div className='flex gap-5'>
-          <Button variant='ghost'>Login</Button>
-          <Button>Get Started</Button>
+          <LoginLink>
+            <Button variant='ghost'>Login</Button>
+          </LoginLink>
+          <RegisterLink>
+            <Button>Get Started</Button>
+          </RegisterLink>
         </div>
       </div>
     </header>

@@ -21,7 +21,8 @@
       "@/*": ["./*"],
       "@components/*": ["./app/_components/*"],
       "@shadcnComponents/*": ["./components/ui/*"],
-      "@assets/*": ["./app/assets/*"]
+      "@assets/*": ["./app/assets/*"],
+      "@config/*": ["./config/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
