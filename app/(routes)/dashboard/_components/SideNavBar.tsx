@@ -48,15 +48,17 @@ function SideNavBar() {
 
   return (
     <div className='p-5 py-14'>
-      <div className='flex justify-center'>
+      <Link href={'/'} className='flex justify-center'>
         <Image src='/logo.png' width={150} height={150} alt='Logo' />
-      </div>
+      </Link>
 
-      <Button className='flex gap-2 w-full rounded-full mt-7'>
-        {' '}
-        <Plus />
-        Create
-      </Button>
+      <Link href={'/create-meeting'}>
+        <Button className='flex gap-2 w-full rounded-full mt-7'>
+          {' '}
+          <Plus />
+          Create
+        </Button>
+      </Link>
 
       <div className='mt-5 flex flex-col gap-5'>
         {menu.map((item) => (

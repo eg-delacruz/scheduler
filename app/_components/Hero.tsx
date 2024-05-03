@@ -1,8 +1,12 @@
-import Link from 'next/link';
+'use client';
+
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
 import AnimatedStandingGirl from './AnimatedStandingGirl/AnimatedStandingGirl';
+
+//Auth
+import { LoginLink } from '@kinde-oss/kinde-auth-nextjs';
 
 function Hero() {
   return (
@@ -13,7 +17,7 @@ function Hero() {
           alt='Woman laughing image'
           width={200}
           height={200}
-          className='h-[200px] object-cover rounded-full absolute top-32 xl:left-48 lg:left-6 -z-10 hidden lg:block'
+          className='h-[200px] object-cover rounded-full absolute top-32 xl:left-48 lg:left-6 -z-1 hidden lg:block'
         />
         <AnimatedStandingGirl />
         <Image
@@ -41,32 +45,36 @@ function Hero() {
         <div className='flex gap-4 flex-col mt-5'>
           <h4 className='text-sm'>Sign Up free with Google and Facebook</h4>
           <div className='flex justify-center gap-8'>
-            <Button className='p-7 flex gap-4'>
-              <Image
-                src='/icons/google.png'
-                alt='Google logo'
-                width={40}
-                height={40}
-                className='bg-white p-1 rounded-sm'
-              />
-              Sign up with Google
-            </Button>
-            <Button className='p-7 flex gap-4'>
-              <Image
-                src='/icons/facebook.png'
-                alt='Google logo'
-                width={40}
-                height={40}
-                className='bg-white p-1 rounded-sm'
-              />{' '}
-              Sign up with Facebook
-            </Button>
+            <LoginLink>
+              <Button className='p-7 flex gap-4'>
+                <Image
+                  src='/icons/google.png'
+                  alt='Google logo'
+                  width={40}
+                  height={40}
+                  className='bg-white p-1 rounded-sm'
+                />
+                Sign up with Google
+              </Button>
+            </LoginLink>
+            <LoginLink>
+              <Button className='p-7 flex gap-4'>
+                <Image
+                  src='/icons/facebook.png'
+                  alt='Google logo'
+                  width={40}
+                  height={40}
+                  className='bg-white p-1 rounded-sm'
+                />{' '}
+                Sign up with Facebook
+              </Button>
+            </LoginLink>
           </div>
           <hr />
           <h2>
-            <Link href='' className='text-primary'>
+            <LoginLink className='text-primary'>
               Sign up Free with Email.{' '}
-            </Link>{' '}
+            </LoginLink>{' '}
             No Credit card required
           </h2>
         </div>

@@ -1,5 +1,6 @@
 import SideNavBar from './_components/SideNavBar';
 import DashboardHeader from './_components/DashboardHeader';
+import { Toaster } from 'sonner';
 
 type Props = {
   children: React.ReactNode;
@@ -13,6 +14,7 @@ function DashboardLayout({ children }: Props) {
       </div>
       <div className='md:ml-64'>
         <DashboardHeader />
+        <Toaster />
         {children}
       </div>
     </div>
