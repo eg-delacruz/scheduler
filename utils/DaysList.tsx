@@ -1,8 +1,5 @@
 export default [
   {
-    day: 'Sunday',
-  },
-  {
     day: 'Monday',
   },
   {
@@ -19,5 +16,8 @@ export default [
   },
   {
     day: 'Saturday',
+  },
+  {
+    day: 'Sunday',
   },
 ];

@@ -50,7 +50,6 @@ function MeetingEventList() {
   //States
   const [events, setEvents] = useState<MeetingEvent[]>([]);
   const [fetchingEvents, setFetchingEvents] = useState<boolean>(false);
-  console.log(events);
 
   const db = getFirestore(app);
   const { user } = useKindeBrowserClient();
