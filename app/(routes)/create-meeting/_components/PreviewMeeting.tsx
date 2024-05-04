@@ -29,7 +29,7 @@ function PreviewMeeting({
     formValue?.duration && createTimeSlot(formValue?.duration);
   }, [formValue]);
 
-  const createTimeSlot = (interval: any) => {
+  const createTimeSlot = (interval: number) => {
     const startTime = 8 * 60; //8 AM in minutes
     const endTime = 22 * 60; //10 PM in minutes
     const totalSlots = (endTime - startTime) / interval;

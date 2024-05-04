@@ -12,11 +12,12 @@ import {
   orderBy,
   doc,
   deleteDoc,
+  getDoc,
 } from 'firebase/firestore';
 import { app } from '@config/FirebaseConfig';
 
 //Auth
-import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
+import { useKindeBrowserClient, LoginLink } from '@kinde-oss/kinde-auth-nextjs';
 
 //Icons
 import { Clock, Copy, MapPin, Settings, Pen, Trash } from 'lucide-react';
@@ -29,27 +30,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@shadcnComponents/dropdown-menu';
+import { Skeleton } from '@shadcnComponents/skeleton';
 
 import { toast } from 'sonner';
 
 //TODO: Make it possible to edit the events
-//TODO: Create a loading state while fetching events
-type MeetingEvent = {
-  //TODO: check the type of the businessId
-  businesssId: unknown;
-  createdBy: string;
-  duration: number;
-  eventName: string;
-  id: string;
-  locationType: string;
-  locationUrl: string;
-  themeColor: string;
-};
 
 function MeetingEventList() {
   //States
   const [events, setEvents] = useState<MeetingEvent[]>([]);
+  const [businessInfo, setBusinessInfo] = useState<BusinessInfo>();
   const [fetchingEvents, setFetchingEvents] = useState<boolean>(false);
+  const [loginError, setLoginError] = useState<boolean>(false);
 
   const db = getFirestore(app);
   const { user } = useKindeBrowserClient();
@@ -74,9 +66,23 @@ function MeetingEventList() {
     setFetchingEvents(false);
   };
 
+  const BusinessInfo = async () => {
+    setLoginError(false);
+    if (user?.email) {
+      const docRef = doc(db, 'Business', user?.email);
+      const docSnap = await getDoc(docRef);
+      setBusinessInfo(docSnap.data() as BusinessInfo);
+    } else {
+      setLoginError(true);
+    }
+  };
+
   useEffect(() => {
     if (user && events.length === 0 && !fetchingEvents) {
       user && getEventList();
+    }
+    if (user) {
+      BusinessInfo();
     }
   }, [user, events, fetchingEvents]);
 
@@ -86,6 +92,26 @@ function MeetingEventList() {
       getEventList();
     });
   };
+
+  const onCopyClickHandler = (event: MeetingEvent) => {
+    const meetingEventUrl =
+      process.env.NEXT_PUBLIC_BASE_URL +
+      '/' +
+      businessInfo?.businessName +
+      '/' +
+      event.id;
+    navigator.clipboard.writeText(meetingEventUrl);
+    toast('Url copied!');
+  };
+
+  const LoadingSkeleton = () => (
+    <>
+      <Skeleton className='w-[285p] h-[205px] rounded-lg' />
+      <Skeleton className='w-[285p] h-[205px] rounded-lg' />
+      <Skeleton className='w-[285p] h-[205px] rounded-lg' />
+      <Skeleton className='w-[285p] h-[205px] rounded-lg' />
+    </>
+  );
 
   return (
     <div className='mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7'>
@@ -131,11 +157,10 @@ function MeetingEventList() {
               <h2
                 className='flex gap-2 text-sm text-primary items-center cursor-pointer'
                 onClick={() => {
-                  navigator.clipboard.writeText(event.locationUrl);
-                  toast('Url copied!');
+                  onCopyClickHandler(event);
                 }}
               >
-                <Copy className='h-4 w-4' /> Copy Link
+                <Copy className='h-4 w-4' /> Copy public Link
               </h2>
               <Button
                 variant='outline'
@@ -143,11 +168,20 @@ function MeetingEventList() {
               >
                 Share
               </Button>
+              {loginError && (
+                <p className='text-red-500 mt-2 bg-red-50 p-1 rounded-sm'>
+                  Seems like your session expired.{' '}
+                  <LoginLink className='text-primary underline' href={'/'}>
+                    Sign in
+                  </LoginLink>{' '}
+                  before creating a new event
+                </p>
+              )}
             </div>
           </div>
         ))
       ) : (
-        <h2>Loading...</h2>
+        <LoadingSkeleton />
       )}
     </div>
   );
