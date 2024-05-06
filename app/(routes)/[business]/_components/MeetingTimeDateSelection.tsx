@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 //Icons library
 import { CalendarCheck, Clock, MapPin, Timer } from 'lucide-react';
@@ -16,8 +17,22 @@ import UserFormInfo from './UserFormInfo';
 import { Button } from '@shadcnComponents/button';
 
 //Firestore
-import { getFirestore, setDoc, doc } from 'firebase/firestore';
+import {
+  getFirestore,
+  setDoc,
+  doc,
+  query,
+  collection,
+  where,
+  getDocs,
+} from 'firebase/firestore';
 import { app } from '@config/FirebaseConfig';
+
+//mailer
+import Plunk from '@plunk/node';
+import { render } from '@react-email/render';
+import { Email } from '@email/index';
+
 import { toast } from 'sonner';
 
 type Props = {
@@ -30,18 +45,22 @@ type Props = {
 //TODO: Check what happens with the MeetingEvent document. Does it change its status to scheduled?
 //TODO: Create a last step saying thank you and that you will receive a confirmation email. Also put a button to redirect to home screen. We can even give a link to see event details and also a link to include it into google calendar
 function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
-  //States
+  //Select Date and Time states
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [timeSlots, setTimeSlots] = useState<string[]>();
   const [enableTimeSlot, setEnableTimeSlot] = useState<boolean>(false);
   const [selectedTime, setSelectedTime] = useState<string>('');
-  const [step, setStep] = useState<number>(1);
+  const [prevBookedSlots, setPrevBookedSlots] = useState<string[]>([]);
 
   //User info states
   const [userName, setUserName] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
   const [userNote, setUserNote] = useState<string>('');
   const [invlidEmailError, setInvalidEmailError] = useState<boolean>(false);
+
+  const [step, setStep] = useState<number>(1);
+
+  const router = useRouter();
 
   useEffect(() => {
     eventInfo?.duration && createTimeSlot(eventInfo?.duration);
@@ -70,14 +89,37 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
     setTimeSlots(slots);
   };
 
-  //Each time we select a new day, we disable or enable the timeslots
+  //Get all occupied time slots to disable them
+  //TODO: check if it is just needed to fetch the Scheduled meeting of a specific Date and eventId, or just of the specific Date, since ther can be other Meetings at the same time...
+  //TODO: fix bug that makes all time slots of all days with same name unavailable. It should just block the ones of the particular day
+  const getPrevEventBooking = async (selectedDate: Date) => {
+    const q = query(
+      collection(db, 'ScheduledMeetings'),
+      where('selectedDate', '==', selectedDate),
+      where('eventId', '==', eventInfo?.id)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      setPrevBookedSlots((prev: unknown[]) => [
+        ...prev,
+        doc.data().selectedTime,
+      ]);
+    });
+  };
+
+  //Each time we select a new day, we disable or enable the timeslots, as well as the next btn
   const handleDateChange = (selectedDate: Date | undefined) => {
     setDate(selectedDate);
     if (selectedDate) {
       //Get the day of the week from a date
       const day = format(selectedDate, 'EEEE');
+
+      //This block will execute just for available days
       if (businessInfo?.daysAvailable?.[day]) {
         setEnableTimeSlot(true);
+        getPrevEventBooking(selectedDate);
       } else {
         setEnableTimeSlot(false);
       }
@@ -110,7 +152,38 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
       userNote,
     }).then((response) => {
       toast('Meeting shceduled successfully!');
+      sendConfirmationEmailToUser(userName);
+      //TODO: sendConfirmationEmailToBusiness
+      router.replace('/confirmation');
     });
+  };
+
+  //mailer
+  const sendConfirmationEmailToUser = (user: string) => {
+    if (process.env.NEXT_PUBLIC_PLUNK_SECRET_API_KEY && date) {
+      const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_SECRET_API_KEY);
+      const emailHtml = render(
+        <Email
+          businessName={businessInfo?.businessName}
+          date={format(date, 'PPP').toString()}
+          duration={eventInfo?.duration}
+          meetingTime={selectedTime}
+          meetingUrl={eventInfo?.locationUrl}
+          userFirstName={user}
+        />
+      );
+
+      plunk.emails
+        .send({
+          to: userEmail,
+          subject: `Meeting Schedule details | ${businessInfo?.businessName}`,
+          body: emailHtml,
+        })
+        //TODO: properly type this
+        .then((response: any) => {
+          console.log(response);
+        });
+    }
   };
 
   return (
@@ -161,6 +234,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
             setSelectedTime={setSelectedTime}
             timeSlots={timeSlots}
             selectedTime={selectedTime}
+            prevBookedSlots={prevBookedSlots}
           />
         ) : (
           <UserFormInfo

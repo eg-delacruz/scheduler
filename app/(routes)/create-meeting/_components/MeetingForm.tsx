@@ -72,10 +72,10 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
 
     //Validating the URL
     const urlRegex = new RegExp(
-      '^(https?://)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?$'
+      '^(https?://)(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?$'
     );
     if (!urlRegex.test(String(locationUrl))) {
-      setValidUrl('Please enter a valid URL');
+      setValidUrl('Please enter a valid URL starting with http or https');
       setCreating(false);
       return;
     }

@@ -25,8 +25,7 @@ type Props = {
 };
 
 //TODO: create loading state
-//TODO: display errors if there is no businessInfo or eventInfo available -> sent to 404
-//TODO: create a go back button
+//TODO: display errors if there is no businessInfo or eventInfo available -> send to 404
 function ShareMeetingEvent({ params }: Props) {
   //States
   const [businessInfo, setBusinessInfo] = useState<BusinessInfo>();

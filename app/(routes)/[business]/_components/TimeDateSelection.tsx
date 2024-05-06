@@ -9,6 +9,7 @@ type Props = {
   setSelectedTime: (time: string) => void;
   selectedTime: string;
   enableTimeSlot: boolean;
+  prevBookedSlots: string[];
 };
 
 function TimeDateSelection({
@@ -18,7 +19,12 @@ function TimeDateSelection({
   setSelectedTime,
   selectedTime,
   enableTimeSlot,
+  prevBookedSlots,
 }: Props) {
+  //This will return a boolean telling if the slot has to be disabled or not
+  const checkTimeSlot = (time: string): boolean => {
+    return prevBookedSlots.filter((item: string) => item == time).length > 0;
+  };
   return (
     <div className='md:col-span-2 flex px-4'>
       <div className='flex flex-col'>
@@ -44,7 +50,7 @@ function TimeDateSelection({
         {timeSlots?.map((time: string, index: number) => (
           <Button
             key={index}
-            disabled={!enableTimeSlot}
+            disabled={!enableTimeSlot || checkTimeSlot(time)}
             className={`border-primary text-primary ${
               time === selectedTime && 'bg-primary text-white'
             }`}

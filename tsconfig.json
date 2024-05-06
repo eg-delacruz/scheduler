@@ -23,7 +23,8 @@
       "@shadcnComponents/*": ["./components/ui/*"],
       "@assets/*": ["./app/assets/*"],
       "@config/*": ["./config/*"],
-      "@utils/*": ["./utils/*"]
+      "@utils/*": ["./utils/*"],
+      "@email/*": ["./emails/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

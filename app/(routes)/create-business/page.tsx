@@ -15,6 +15,8 @@ import { getFirestore, doc, setDoc } from 'firebase/firestore';
 //Auth
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 
+//TODO: check if when we register with email, it tells the user that it has already been created. If not, we neet to check that in the  db, the business name is inique.
+//TODO: add the settings part to edit the business name
 function CreateBusiness() {
   const [businessName, setBusinessName] = useState<string>('');
   const db = getFirestore(app);

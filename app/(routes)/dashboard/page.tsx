@@ -10,6 +10,7 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { app } from '@config/FirebaseConfig';
 
 //This component will just check if there is a created business and redirect accordingly while showing a loading state
+//TODO: display a proper loading screen
 function Dashboard() {
   //Logged in user info
   const { user } = useKindeBrowserClient();
