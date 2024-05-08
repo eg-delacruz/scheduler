@@ -138,11 +138,14 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
     }
 
     const docId = Date.now().toString();
+    //TODO: review if all this info stored in the scheduled meeting is necessary and eliminate what is not being used
     await setDoc(doc(db, 'ScheduledMeetings', docId), {
       businessName: businessInfo?.businessName,
       businessEmail: businessInfo?.email,
       selectedTime,
       selectedDate: date,
+      formatedDate: format(date ?? '', 'PPP'),
+      formatedTimeStamp: format(date ?? '', 't'),
       duration: eventInfo?.duration,
       locationUrl: eventInfo?.locationUrl,
       eventId: eventInfo?.id,
@@ -179,9 +182,8 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
           subject: `Meeting Schedule details | ${businessInfo?.businessName}`,
           body: emailHtml,
         })
-        //TODO: properly type this
         .then((response: any) => {
-          console.log(response);
+          console.log('Email sent to user');
         });
     }
   };

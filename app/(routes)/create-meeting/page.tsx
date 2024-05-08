@@ -6,6 +6,7 @@ import { useState } from 'react';
 import MeetingForm from './_components/MeetingForm';
 import PreviewMeeting from './_components/PreviewMeeting';
 
+//TODO: Give initial values to this state instead of conditional rendering the values in the preview screen, since that creates a moment of empty data and therefore it feels slow
 function CreateMeeting() {
   const [formValue, setFormValue] = useState<
     | {

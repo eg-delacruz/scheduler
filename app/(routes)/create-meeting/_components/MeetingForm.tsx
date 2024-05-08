@@ -36,7 +36,7 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
   const [duration, setDuration] = useState<number>(30);
   const [locationType, setLocationType] = useState<string>();
   const [locationUrl, setLocationUrl] = useState<string>();
-  const [themeColor, setThemeColor] = useState<string>();
+  const [themeColor, setThemeColor] = useState<string>(ThemeOptions[0]);
 
   const [loginError, setLoginError] = useState<boolean>(false);
   const [validUrl, setValidUrl] = useState<string>('');

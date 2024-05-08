@@ -35,12 +35,14 @@ import { Skeleton } from '@shadcnComponents/skeleton';
 import { toast } from 'sonner';
 
 //TODO: Make it possible to edit the events
-
+//TODO: Create a nicer "No events created" screen
 function MeetingEventList() {
   //States
+  //State used to avoid infinite fetchings on component mount
+  const [onMountFetch, setOnMountFetch] = useState<boolean>(false);
   const [events, setEvents] = useState<MeetingEvent[]>([]);
   const [businessInfo, setBusinessInfo] = useState<BusinessInfo>();
-  const [fetchingEvents, setFetchingEvents] = useState<boolean>(false);
+  const [fetchingEvents, setFetchingEvents] = useState<boolean>(true);
   const [loginError, setLoginError] = useState<boolean>(false);
 
   const db = getFirestore(app);
@@ -78,13 +80,14 @@ function MeetingEventList() {
   };
 
   useEffect(() => {
-    if (user && events.length === 0 && !fetchingEvents) {
+    if (user && !onMountFetch) {
       user && getEventList();
+      setOnMountFetch(true);
     }
     if (user) {
       BusinessInfo();
     }
-  }, [user, events, fetchingEvents]);
+  }, [user, onMountFetch]);
 
   const onDeleteMeetingEvent = async (event: MeetingEvent) => {
     await deleteDoc(doc(db, 'MeetingEvent', event.id)).then((response) => {
@@ -115,7 +118,11 @@ function MeetingEventList() {
 
   return (
     <div className='mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7'>
-      {events.length > 0 ? (
+      {fetchingEvents ? (
+        <LoadingSkeleton />
+      ) : events.length === 0 ? (
+        <p>No events created</p>
+      ) : (
         events?.map((event) => (
           <div
             style={{ borderTopColor: event?.themeColor }}
@@ -180,8 +187,6 @@ function MeetingEventList() {
             </div>
           </div>
         ))
-      ) : (
-        <LoadingSkeleton />
       )}
     </div>
   );

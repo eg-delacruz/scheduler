@@ -8,6 +8,7 @@ import AnimatedStandingGirl from './AnimatedStandingGirl/AnimatedStandingGirl';
 //Auth
 import { LoginLink } from '@kinde-oss/kinde-auth-nextjs';
 
+//TODO: Create a nicer hero
 function Hero() {
   return (
     <section className='flex flex-col justify-center items-center my-20'>
