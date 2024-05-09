@@ -1,0 +1,58 @@
+//Used to create dynamic name for keyframes
+@mixin keyframes($animName) {
+  @keyframes #{$animName} {
+    @content;
+  }
+}
+
+@mixin shake($animName, $delay: 0s) {
+  @include keyframes($animName) {
+    0% {
+      transform: translateX(0);
+    }
+    0.3% {
+      transform: translateX(-5px);
+    }
+    0.6% {
+      transform: translateX(5px);
+    }
+    0.9% {
+      transform: translateX(-5px);
+    }
+    1.2% {
+      transform: translateX(5px);
+    }
+    1.5% {
+      transform: translateX(-5px);
+    }
+    1.8% {
+      transform: translateX(5px);
+    }
+    2.1% {
+      transform: translateX(-5px);
+    }
+    2.4% {
+      transform: translateX(5px);
+    }
+    2.7% {
+      transform: translateX(-5px);
+    }
+    3% {
+      transform: translateX(0);
+    }
+  }
+  animation: $animName 30s forwards infinite ease-in-out;
+  animation-delay: $delay;
+}
+
+.dot1 {
+  @include shake(dot1, 0);
+}
+
+.dot2 {
+  @include shake(dot2, 10s);
+}
+
+.dot3 {
+  @include shake(dot3, 20s);
+}

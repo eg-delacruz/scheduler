@@ -7,47 +7,41 @@ import AnimatedStandingGirl from './AnimatedStandingGirl/AnimatedStandingGirl';
 
 //Auth
 import { LoginLink } from '@kinde-oss/kinde-auth-nextjs';
+import AnimatedCalendar from './AnimatedCalendar/AnimatedCalendar';
+import AnimatedDatePicker from './AnimatedDatePicker/AnimatedDatePicker';
 
-//TODO: Create a nicer hero
 function Hero() {
   return (
-    <section className='flex flex-col justify-center items-center my-20'>
+    <section className='flex flex-col justify-center items-center mb-20 lg:my-20'>
+      {/* Images */}
       <div>
         <Image
           src='/images/home/woman_laugh.jpg'
-          alt='Woman laughing image'
+          alt='Woman smiling image'
           width={200}
           height={200}
-          className='h-[200px] object-cover rounded-full absolute top-32 xl:left-48 lg:left-6 -z-1 hidden lg:block'
+          className='h-[200px] object-cover rounded-full absolute top-32 xl:left-48 lg:left-6 -z-1 hidden lg:block border-gray-300 border-8'
         />
         <AnimatedStandingGirl />
-        <Image
-          src='/images/home/calendar_draw.svg'
-          alt='Calendar image'
-          width={350}
-          height={175}
-          className=' object-cover rounded-md absolute xl:right-36 lg:right-6  -z-10 rotate-12 opacity-75 hidden lg:block'
-        />
-        <Image
-          src='/images/home/date_picker.svg'
-          alt='Date picker image'
-          width={250}
-          height={125}
-          className=' object-cover rounded-md absolute left-48  -z-10 -rotate-12 opacity-75 bottom-20 hidden lg:block'
-        />
+
+        <AnimatedCalendar />
+
+        <AnimatedDatePicker />
       </div>
 
       {/* xl is a size measure in tailwind  */}
-      <div className='text-center max-w-3xl mt-14'>
-        <h2 className='font-bold text-[60px] text-slate-700'>
+      <div className='text-center max-w-3xl mt-2 sm:mt-14'>
+        <h2 className='font-bold text-[60px] text-slate-900'>Your Scheduler</h2>
+        <h3 className='text-xl mt-5 text-slate-700'>
           Just at the right moment
-        </h2>
-        <h3 className='text-xl mt-5 text-slate-500'>Easy. Automatic. Free.</h3>
-        <div className='flex gap-4 flex-col mt-5'>
-          <h4 className='text-sm'>Sign Up free with Google and Facebook</h4>
-          <div className='flex justify-center gap-8'>
+        </h3>
+        <div className='flex gap-4 flex-col sm:mt-5'>
+          <h4 className='text-sm'>
+            Free scheduling tool to manage all your appointments
+          </h4>
+          <div className='flex flex-col items-center gap-3 sm:flex-row sm:gap-8 justify-center'>
             <LoginLink>
-              <Button className='p-7 flex gap-4'>
+              <Button className='p-7 flex gap-4 w-[234px]'>
                 <Image
                   src='/icons/google.png'
                   alt='Google logo'
@@ -59,7 +53,7 @@ function Hero() {
               </Button>
             </LoginLink>
             <LoginLink>
-              <Button className='p-7 flex gap-4'>
+              <Button className='p-7 flex gap-4 w-[234px]'>
                 <Image
                   src='/icons/facebook.png'
                   alt='Google logo'
@@ -71,12 +65,9 @@ function Hero() {
               </Button>
             </LoginLink>
           </div>
-          <hr />
+          <hr className='border-stone-700 opacity-80' />
           <h2>
-            <LoginLink className='text-primary'>
-              Sign up Free with Email.{' '}
-            </LoginLink>{' '}
-            No Credit card required
+            <LoginLink className='text-primary'>Sign up with Email</LoginLink>
           </h2>
         </div>
       </div>

@@ -1,0 +1,92 @@
+//Used to create dynamic name for keyframes
+@mixin keyframes($animName) {
+  @keyframes #{$animName} {
+    @content;
+  }
+}
+
+//Since keyframe name has to be unique, keyframes mixin is required
+@mixin fadeInOut($animName, $animationDelay: 0s, $duration: 25s) {
+  @include keyframes($animName) {
+    0% {
+      opacity: 0;
+    }
+    5% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 1;
+    }
+    55% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  animation: $animName $duration forwards infinite ease-in-out;
+  animation-delay: $animationDelay;
+}
+
+//Since keyframe name has to be unique, keyframes mixin is required
+@mixin fadeOutIn($animName, $duration: 25s) {
+  @include keyframes($animName) {
+    0% {
+      opacity: 1;
+    }
+    5% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0;
+    }
+    55% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  animation: $animName $duration forwards infinite ease-in-out;
+  animation-delay: 0s;
+}
+
+.circle1 {
+  @include fadeInOut(circle1, 0s, 25s);
+}
+
+.circle2 {
+  @include fadeOutIn(circle2, 30s);
+}
+
+.circle3 {
+  @include fadeInOut(circle3, 5s, 25s);
+}
+
+.circle4 {
+  @include fadeOutIn(circle4, 25s);
+}
+
+.circle5 {
+  @include fadeInOut(circle5, 10s, 25s);
+}
+
+.circle6 {
+  @include fadeOutIn(circle6, 20s);
+}
+
+.circle7 {
+  @include fadeInOut(circle7, 15s, 25s);
+}
+
+.circle8 {
+  @include fadeOutIn(circle8, 15s);
+}
+
+.circle9 {
+  @include fadeOutIn(circle9, 30s);
+}
+
+.circle10 {
+  @include fadeOutIn(circle10, 30s);
+}

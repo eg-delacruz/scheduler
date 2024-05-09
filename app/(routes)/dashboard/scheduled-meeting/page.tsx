@@ -32,7 +32,6 @@ function ScheduledMeeting() {
   //TODO: properly type this
   const [mounted, setMounted] = useState<boolean>(false);
   const [meetingList, setMeetingList] = useState<any[]>([]);
-  console.log(meetingList);
 
   //Auth
   const { user } = useKindeBrowserClient();
