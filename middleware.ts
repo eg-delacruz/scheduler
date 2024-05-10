@@ -14,6 +14,7 @@ export async function middleware(request: NextRequest) {
   }
 }
 
+//TODO: check that all protected routes are here
 // Protected routes
 export const config = {
   matcher: ['/dashboard', '/dashboard/:path*', '/create-business'],

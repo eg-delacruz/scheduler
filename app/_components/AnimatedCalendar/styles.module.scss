@@ -51,32 +51,34 @@
   animation-delay: 0s;
 }
 
+//Fade in out
 .circle1 {
   @include fadeInOut(circle1, 0s, 25s);
 }
 
-.circle2 {
-  @include fadeOutIn(circle2, 30s);
-}
-
 .circle3 {
-  @include fadeInOut(circle3, 5s, 25s);
-}
-
-.circle4 {
-  @include fadeOutIn(circle4, 25s);
+  @include fadeInOut(circle3, 5s, 15s);
 }
 
 .circle5 {
   @include fadeInOut(circle5, 10s, 25s);
 }
 
-.circle6 {
-  @include fadeOutIn(circle6, 20s);
+.circle7 {
+  @include fadeInOut(circle7, 15s, 15s);
 }
 
-.circle7 {
-  @include fadeInOut(circle7, 15s, 25s);
+//Fade out in
+.circle2 {
+  @include fadeOutIn(circle2, 30s);
+}
+
+.circle4 {
+  @include fadeOutIn(circle4, 25s);
+}
+
+.circle6 {
+  @include fadeOutIn(circle6, 20s);
 }
 
 .circle8 {
@@ -88,5 +90,5 @@
 }
 
 .circle10 {
-  @include fadeOutIn(circle10, 30s);
+  @include fadeOutIn(circle10, 15s);
 }

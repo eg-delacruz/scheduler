@@ -10,38 +10,38 @@
     0% {
       transform: translateX(0);
     }
-    0.3% {
+    0.5% {
       transform: translateX(-5px);
     }
-    0.6% {
-      transform: translateX(5px);
-    }
-    0.9% {
-      transform: translateX(-5px);
-    }
-    1.2% {
+    1% {
       transform: translateX(5px);
     }
     1.5% {
       transform: translateX(-5px);
     }
-    1.8% {
+    2% {
       transform: translateX(5px);
     }
-    2.1% {
-      transform: translateX(-5px);
-    }
-    2.4% {
-      transform: translateX(5px);
-    }
-    2.7% {
+    2.5% {
       transform: translateX(-5px);
     }
     3% {
+      transform: translateX(5px);
+    }
+    3.5% {
+      transform: translateX(-5px);
+    }
+    4% {
+      transform: translateX(5px);
+    }
+    4.5% {
+      transform: translateX(-5px);
+    }
+    5% {
       transform: translateX(0);
     }
   }
-  animation: $animName 30s forwards infinite ease-in-out;
+  animation: $animName 9s forwards infinite ease-in-out;
   animation-delay: $delay;
 }
 
@@ -50,9 +50,9 @@
 }
 
 .dot2 {
-  @include shake(dot2, 10s);
+  @include shake(dot2, 3s);
 }
 
 .dot3 {
-  @include shake(dot3, 20s);
+  @include shake(dot3, 6s);
 }

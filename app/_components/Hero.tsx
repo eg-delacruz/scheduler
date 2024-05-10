@@ -12,7 +12,7 @@ import AnimatedDatePicker from './AnimatedDatePicker/AnimatedDatePicker';
 
 function Hero() {
   return (
-    <section className='flex flex-col justify-center items-center mb-20 lg:my-20'>
+    <section className='hero_landing_bg h-full relative z-10'>
       {/* Images */}
       <div>
         <Image
@@ -20,7 +20,7 @@ function Hero() {
           alt='Woman smiling image'
           width={200}
           height={200}
-          className='h-[200px] object-cover rounded-full absolute top-32 xl:left-48 lg:left-6 -z-1 hidden lg:block border-gray-300 border-8'
+          className='h-[200px] object-cover rounded-full absolute top-10 xl:left-48 lg:left-6 -z-1 hidden lg:block border-gray-300 border-8'
         />
         <AnimatedStandingGirl />
 
@@ -30,8 +30,10 @@ function Hero() {
       </div>
 
       {/* xl is a size measure in tailwind  */}
-      <div className='text-center max-w-3xl mt-2 sm:mt-14'>
-        <h2 className='font-bold text-[60px] text-slate-900'>Your Scheduler</h2>
+      <div className='text-center max-w-xl mx-auto'>
+        <h2 className='font-bold text-[60px] text-slate-900 pt-2 md:pt-32'>
+          Your Scheduler
+        </h2>
         <h3 className='text-xl mt-5 text-slate-700'>
           Just at the right moment
         </h3>
@@ -65,7 +67,7 @@ function Hero() {
               </Button>
             </LoginLink>
           </div>
-          <hr className='border-stone-700 opacity-80' />
+          <hr className='border-stone-700 opacity-80 w-[200px] mx-auto' />
           <h2>
             <LoginLink className='text-primary'>Sign up with Email</LoginLink>
           </h2>

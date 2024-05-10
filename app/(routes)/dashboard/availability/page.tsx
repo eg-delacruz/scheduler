@@ -21,26 +21,28 @@ import { toast } from 'sonner';
 function Availability() {
   const { user } = useKindeBrowserClient();
 
-  const [daysAvailable, setDaysAvailable] = useState<{}>({
-    Sunday: false,
+  const [startTime, setStartTime] = useState<string>('08:00');
+  const [endTime, setEndTime] = useState<string>('17:00');
+
+  const [fetchingData, setFetchingData] = useState<boolean>(true);
+
+  const [loginError, setLoginError] = useState<boolean>(false);
+  const [daysAvailable, setDaysAvailable] = useState<{
+    [key: string]: boolean;
+  }>({
     Monday: false,
     Tuesday: false,
     Wednesday: false,
     Thursday: false,
     Friday: false,
     Saturday: false,
+    Sunday: false,
   });
-  const [startTime, setStartTime] = useState<string>();
-  const [endTime, setEndTime] = useState<string>();
-
-  const [fetchingData, setFetchingData] = useState<boolean>(true);
-
-  const [loginError, setLoginError] = useState<boolean>(false);
 
   const handleDayCheckboxChange = (day: string, e: unknown) => {
     setDaysAvailable({
       ...daysAvailable,
-      [day]: e,
+      [day]: e as boolean,
     });
   };
 
@@ -74,9 +76,11 @@ function Availability() {
       const docRef = doc(db, 'Business', user?.email);
       const docSnap = await getDoc(docRef);
       const result = docSnap.data();
-      setDaysAvailable(result?.daysAvailable);
-      setStartTime(result?.startTime);
-      setEndTime(result?.endTime);
+
+      result?.daysAvailable && setDaysAvailable(result?.daysAvailable);
+      result?.startTime && setStartTime(result?.startTime);
+      result?.endTime && setEndTime(result?.endTime);
+
       setFetchingData(false);
     } else {
       setLoginError(true);
@@ -102,7 +106,7 @@ function Availability() {
         <Skeleton className='h-[38px] w[94px]' />
       </div>
       <div className='mt-3'>
-        <h2>Start time</h2>
+        <h2>End time</h2>
         <Skeleton className='h-[38px] w[94px]' />
       </div>
     </div>
@@ -127,8 +131,7 @@ function Availability() {
                 <h2 className='flex gap-1 justify-start items-center'>
                   <Checkbox
                     checked={
-                      daysAvailable[item.day as keyof typeof daysAvailable] ||
-                      false
+                      daysAvailable?.[item.day as keyof typeof daysAvailable]
                     }
                     onCheckedChange={(e) =>
                       handleDayCheckboxChange(item.day, e)

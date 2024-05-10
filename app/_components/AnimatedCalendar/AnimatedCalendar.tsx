@@ -9,7 +9,7 @@ function AnimatedCalendar() {
         viewBox='0 0 686 363'
         fill='none'
         xmlns='http://www.w3.org/2000/svg'
-        className='absolute -z-10 right-10 sm:right-1/4 md:right-1/3 lg:right-6 xl:right-36 rotate-12 -bottom-8 lg:top-10'
+        className='absolute -z-10 right-10 sm:right-1/4 md:right-1/3 lg:right-6 xl:right-36 rotate-12 bottom-12 lg:top-10'
       >
         <rect
           x='1.5'

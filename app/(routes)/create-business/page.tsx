@@ -17,6 +17,9 @@ import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 
 //TODO: check if when we register with email, it tells the user that it has already been created. If not, we neet to check that in the  db, the business name is inique.
 //TODO: add the settings part to edit the business name
+
+//TODO: 1. Instead of creating a business, create an 'organization' ask for the type (business or personal) and for the name (placeholder: 'Namo of your organization or personal name'). Don´t ask here for the email to avoid having it twice (user and organization). Ask here for the daysAvailable, startTime and EndTime
+
 function CreateBusiness() {
   const [businessName, setBusinessName] = useState<string>('');
   const db = getFirestore(app);
