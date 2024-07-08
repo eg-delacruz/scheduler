@@ -36,6 +36,7 @@ import { toast } from 'sonner';
 
 //TODO: Make it possible to edit the events
 //TODO: Create a nicer "No events created" screen
+//TODO: Add a modal when deleting an event
 function MeetingEventList() {
   //States
   //State used to avoid infinite fetchings on component mount

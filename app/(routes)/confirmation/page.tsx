@@ -3,6 +3,7 @@ import { CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
+//TODO: Instead of ThankYou, tell the user if he would like to explore yourscheduler to arrange his own meetings
 function Confirmation() {
   return (
     <div className='flex flex-col items-center justify-center p-20 gap-5'>

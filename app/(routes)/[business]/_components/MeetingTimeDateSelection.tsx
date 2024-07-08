@@ -92,6 +92,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
   //Get all occupied time slots to disable them
   //TODO: check if it is just needed to fetch the Scheduled meeting of a specific Date and eventId, or just of the specific Date, since ther can be other Meetings at the same time...
   //TODO: fix bug that makes all time slots of all days with same name unavailable. It should just block the ones of the particular day
+  //TODO: Check what this function does and if it is necessary
   const getPrevEventBooking = async (selectedDate: Date) => {
     const q = query(
       collection(db, 'ScheduledMeetings'),
@@ -211,7 +212,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
               {eventInfo?.locationType} Meeting
             </h2>
             <h2 className='flex gap-2'>
-              <CalendarCheck /> {format(date ?? '', 'PPP')}
+              <CalendarCheck /> {date && format(date, 'PPP')}
             </h2>
             {selectedTime && (
               <h2 className='flex gap-2'>
@@ -237,6 +238,8 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
             timeSlots={timeSlots}
             selectedTime={selectedTime}
             prevBookedSlots={prevBookedSlots}
+            setEnableTimeSlot={setEnableTimeSlot}
+            daysAvailable={businessInfo?.daysAvailable}
           />
         ) : (
           <UserFormInfo

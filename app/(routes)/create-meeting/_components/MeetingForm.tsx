@@ -30,6 +30,11 @@ import { LoginLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
+//TODO: If the Location is phone, allow the user to add a phone number and avoid the valid URL check. As placeholder, add 'Add your Phone Number'
+//TODO: Check how long is the session in Kinde
+//TODO: Check the loggin error within a useEffect?
+//TODO: Redirect to login if the user is not logged in instead of the home page
+//TODO: If there is a login error, save the form values in the local storage until the user is logged in again and goes to create meeting form again
 function MeetingForm({ setFormValue }: { setFormValue: Function }) {
   //Input states
   const [eventName, setEventName] = useState<string>();

@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { Calendar } from '@shadcnComponents/calendar';
 import { Button } from '@shadcnComponents/button';
 
+//TODO: under preview, add a small description telling the user that he shouldn't change the date and time. Also maybe say that that is what the other person will see when scheduling a meeting with the user
 function PreviewMeeting({
   formValue,
 }: {

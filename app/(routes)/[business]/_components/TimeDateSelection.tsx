@@ -1,6 +1,11 @@
+import { useEffect, useState } from 'react';
+
 //Shadcn UI components
 import { Calendar } from '@shadcnComponents/calendar';
 import { Button } from '@shadcnComponents/button';
+
+//Date format library instelled along with shadcn ui
+import { format } from 'date-fns/format';
 
 type Props = {
   date: Date | undefined;
@@ -10,8 +15,11 @@ type Props = {
   selectedTime: string;
   enableTimeSlot: boolean;
   prevBookedSlots: string[];
+  setEnableTimeSlot: (value: boolean) => void;
+  daysAvailable: { [day: string]: string } | undefined;
 };
 
+//TODO: display a loading skeleton based on initialLoad (when false, show skeleton)
 function TimeDateSelection({
   date,
   handleDateChange,
@@ -20,7 +28,27 @@ function TimeDateSelection({
   selectedTime,
   enableTimeSlot,
   prevBookedSlots,
+  setEnableTimeSlot,
+  daysAvailable,
 }: Props) {
+  const [initialLoad, setInitialLoad] = useState<boolean>(false);
+
+  //This will check if the date is available when the component mounts (just once)
+  useEffect(() => {
+    if (date && !initialLoad && daysAvailable) {
+      //Get the day of the week from the initial data (today's date)
+      const day = format(date, 'EEEE');
+
+      //This block will execute just for available days
+      if (daysAvailable?.[day]) {
+        setEnableTimeSlot(true);
+      } else {
+        setEnableTimeSlot(false);
+      }
+      setInitialLoad(true);
+    }
+  }, [daysAvailable, initialLoad, date]);
+
   //This will return a boolean telling if the slot has to be disabled or not
   const checkTimeSlot = (time: string): boolean => {
     return prevBookedSlots.filter((item: string) => item == time).length > 0;

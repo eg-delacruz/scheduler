@@ -4,6 +4,7 @@ import { Input } from '@shadcnComponents/input';
 //Components
 import MeetingEventList from './_components/MeetingEventList';
 
+//TODO: make the search bar work
 function MeetingType() {
   return (
     <div className='p-5'>
