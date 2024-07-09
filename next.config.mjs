@@ -6,3 +6,5 @@ const nextConfig = {
 };
 
 export default nextConfig;
+
+//TODO: use "images.remotePatterns" config instead of "images.domains" config

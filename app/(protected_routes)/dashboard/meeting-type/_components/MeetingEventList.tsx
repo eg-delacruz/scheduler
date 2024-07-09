@@ -34,6 +34,8 @@ import { Skeleton } from '@shadcnComponents/skeleton';
 
 import { toast } from 'sonner';
 
+import { redirect } from 'next/navigation';
+
 //TODO: Make it possible to edit the events
 //TODO: Create a nicer "No events created" screen
 //TODO: Add a modal when deleting an event
@@ -47,7 +49,7 @@ function MeetingEventList() {
   const [loginError, setLoginError] = useState<boolean>(false);
 
   const db = getFirestore(app);
-  const { user } = useKindeBrowserClient();
+  const { user, isAuthenticated, isLoading } = useKindeBrowserClient();
 
   //Getting events
   const getEventList = async () => {
@@ -117,11 +119,18 @@ function MeetingEventList() {
     </>
   );
 
+  if (fetchingEvents || isLoading) {
+    return <LoadingSkeleton />;
+  }
+
+  //TODO: If the app doesn't solve the problem of infinite loading, erase the layout of protected routes and use the following code in all protected routes
+  // if (!isLoading && !isAuthenticated) {
+  //   redirect('/api/auth/login');
+  // }
+
   return (
     <div className='mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7'>
-      {fetchingEvents ? (
-        <LoadingSkeleton />
-      ) : events.length === 0 ? (
+      {events.length === 0 ? (
         <p>No events created</p>
       ) : (
         events?.map((event) => (

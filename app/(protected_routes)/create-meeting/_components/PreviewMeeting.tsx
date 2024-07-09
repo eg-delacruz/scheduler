@@ -75,6 +75,7 @@ function PreviewMeeting({
                 <MapPin />
                 {formValue?.locationType} Meeting
               </h2>
+              {/* TODO: Use a instead of link to avoid error when typing https:// in production. If error persists, just use a normal p and style it to make it look like a URL */}
               <Link
                 className='text-primary text-ellipsis block whitespace-nowrap overflow-hidden'
                 href={formValue?.locationUrl ?? ''}
