@@ -17,3 +17,34 @@ interface MeetingEvent {
   locationUrl: string;
   themeColor: string;
 }
+
+interface KindeUser {
+  id: string;
+  email: string | null;
+  given_name: string | null;
+  family_name: string | null;
+  picture: string | null;
+}
+
+interface SchedulerUser {
+  name: string | null;
+  email: string | null;
+  created_at: Date;
+  organizations: Organization[];
+  current_organization: {
+    id: string;
+    name: string;
+  };
+}
+
+interface Organization {
+  name: string;
+  id: string;
+  created_by: string;
+  created_at: Date;
+  modified_at: Date;
+  modified_by: string;
+  days_available: { [key: string]: boolean };
+  end_time: string;
+  start_time: string;
+}
