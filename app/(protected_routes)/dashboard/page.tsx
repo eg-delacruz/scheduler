@@ -12,10 +12,15 @@ import { app } from "@config/FirebaseConfig";
 //Utils
 import createSchedulerUser from "@utils/createSchedulerUser";
 
+//Context
+import { useAppContext } from "@context/index";
+
 //TODO: display a proper loading screen
 //TODO: if there is a user, based on that, automatically create a 'user' with userName info and email, settings
 //TODO: instead of redirecting to meeting-type, display the meeting list here
 function Dashboard() {
+  const { SchedulerUser, setContext } = useAppContext();
+
   //Logged in user info
   const { user, isLoading, isAuthenticated } = useKindeBrowserClient();
 
@@ -66,13 +71,14 @@ function Dashboard() {
     } else {
       if (user) {
         const SchedulerUser = await createSchedulerUser(user);
+        setContext(SchedulerUser);
         console.log("User created");
         setLoading(false);
       }
     }
   };
 
-  if (loading || isLoading) {
+  if (loading || isLoading || !SchedulerUser) {
     return <h2>Loading</h2>;
   }
 }

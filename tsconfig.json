@@ -24,7 +24,8 @@
       "@assets/*": ["./app/assets/*"],
       "@config/*": ["./config/*"],
       "@utils/*": ["./utils/*"],
-      "@email/*": ["./emails/*"]
+      "@email/*": ["./emails/*"],
+      "@context/*": ["./context/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
