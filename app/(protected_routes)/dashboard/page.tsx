@@ -1,5 +1,5 @@
 "use client";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 //Auth
@@ -15,10 +15,14 @@ import createSchedulerUser from "@utils/createSchedulerUser";
 //Context
 import { useAppContext } from "@context/index";
 
+//Components
+import Meetings from "@/app/(protected_routes)/dashboard/_components/Meetings";
+
 //TODO: display a proper loading screen
-//TODO: if there is a user, based on that, automatically create a 'user' with userName info and email, settings
 //TODO: instead of redirecting to meeting-type, display the meeting list here
 function Dashboard() {
+  //Context
+  //TODO: check if the context isn't refetched on every page reload when navigating through the website and coming back to the dashboard
   const { SchedulerUser, setContext } = useAppContext();
 
   //Logged in user info
@@ -34,9 +38,14 @@ function Dashboard() {
   useEffect(() => {
     //TODO: erase the isBusinessRegistered() logic
     //user && isBusinessRegistered();
-    user && isSchedulerUserCreated();
+    if (user && isAuthenticated && !SchedulerUser) {
+      isSchedulerUserCreated();
+    } else if (user && isAuthenticated && SchedulerUser) {
+      setLoading(false);
+    }
   }, [user]);
 
+  //Auth redirect
   if (!isLoading && !isAuthenticated) {
     router.replace("/api/auth/login");
   }
@@ -65,9 +74,9 @@ function Dashboard() {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      //TODO: store it in a context, and based on that context, display the meeting list
+      const SchedulerUser = docSnap.data() as SchedulerUser;
+      setContext(SchedulerUser);
       setLoading(false);
-      //console.log("Document data:", docSnap.data());
     } else {
       if (user) {
         const SchedulerUser = await createSchedulerUser(user);
@@ -78,9 +87,11 @@ function Dashboard() {
     }
   };
 
-  if (loading || isLoading || !SchedulerUser) {
-    return <h2>Loading</h2>;
+  if (loading || isLoading || !SchedulerUser || true) {
+    return <div>Loading</div>;
   }
+
+  return <Meetings />;
 }
 
 export default Dashboard;
