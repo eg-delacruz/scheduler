@@ -19,13 +19,13 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@components/*": ["./app/_components/*"],
-      "@shadcnComponents/*": ["./components/ui/*"],
+      "@components/*": ["./components/*"],
       "@assets/*": ["./app/assets/*"],
       "@config/*": ["./config/*"],
       "@utils/*": ["./utils/*"],
       "@email/*": ["./emails/*"],
-      "@context/*": ["./context/*"]
+      "@context/*": ["./context/*"],
+      "@shadcnComponents/*": ["./shadcn/ui/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

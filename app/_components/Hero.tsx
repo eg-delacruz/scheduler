@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@shadcnComponents/button';
 import AnimatedStandingGirl from './AnimatedStandingGirl/AnimatedStandingGirl';
 
 //Auth
