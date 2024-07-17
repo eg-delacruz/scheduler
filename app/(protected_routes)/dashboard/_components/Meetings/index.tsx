@@ -1,6 +1,14 @@
-import React from "react";
+import NoOrgCreated from "./_components/NoOrgCreated";
 
-function Meetings() {
+type MeetingsProps = {
+  SchedulerUser: SchedulerUser;
+};
+
+function Meetings({ SchedulerUser }: MeetingsProps) {
+  if (SchedulerUser.organizations.length == 0) {
+    return <NoOrgCreated />;
+  }
+
   return <div>Meetings</div>;
 }
 
