@@ -15,24 +15,30 @@ function SideNavBar() {
   const menu = [
     {
       id: 1,
+      name: 'Meetings',
+      path: '/dashboard',
+      icon: Calendar,
+    },
+    {
+      id: 2,
       name: 'Meeting Type',
       path: '/dashboard/meeting-type',
       icon: Briefcase,
     },
     {
-      id: 2,
+      id: 3,
       name: 'Scheduled Meeting',
       path: '/dashboard/scheduled-meeting',
       icon: Calendar,
     },
     {
-      id: 3,
+      id: 4,
       name: 'Availability',
       path: '/dashboard/availability',
       icon: Clock,
     },
     {
-      id: 4,
+      id: 5,
       name: 'Settings',
       path: '/dashboard/settings',
       icon: Settings,

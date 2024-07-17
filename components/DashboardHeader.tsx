@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import {
   LogoutLink,
@@ -38,11 +39,16 @@ function DashboardHeader() {
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>
-                <LogoutLink>Logout</LogoutLink>
-              </DropdownMenuItem>
+              <Link href={'/organizations'}>
+                <DropdownMenuItem className='cursor-pointer'>
+                  Organizations
+                </DropdownMenuItem>
+              </Link>
+              <LogoutLink>
+                <DropdownMenuItem className='cursor-pointer'>
+                  Logout
+                </DropdownMenuItem>
+              </LogoutLink>
             </DropdownMenuContent>
           </DropdownMenu>
         </>

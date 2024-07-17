@@ -17,7 +17,7 @@ function NoOrgCreated() {
           You must first create an organization before you can start scheduling
         </p>
         <br />
-        <Link href={'#'}>
+        <Link className='block mx-auto w-fit' href={'/organizations'}>
           <div className='mx-auto border w-fit rounded bg-slate-200'>
             <Plus size={40} color='#0e5ddd' />
           </div>

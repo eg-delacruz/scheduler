@@ -16,7 +16,7 @@ import createSchedulerUser from '@utils/createSchedulerUser';
 import { useAppContext } from '@context/index';
 
 //Components
-import Meetings from '@/app/(protected_routes)/dashboard/_components/Meetings';
+import Meetings from '@/app/(protected_routes)/(with_user_layout)/dashboard/_components/Meetings';
 import Loader from '@components/Loader';
 
 //TODO: display a proper loading screen
