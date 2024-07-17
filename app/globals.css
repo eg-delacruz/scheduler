@@ -78,5 +78,6 @@
 .hero_landing_bg {
   /* substract the header height */
   height: calc(100vh - 72px);
-  background-image: url("./assets//images/background_pattern.png");
+  background-image: url('./assets//images/background_pattern.png');
+  /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }

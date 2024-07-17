@@ -17,7 +17,6 @@ import { useAppContext } from "@context/index";
 
 //Components
 import Meetings from "@/app/(protected_routes)/dashboard/_components/Meetings";
-import Loader from "@components/Loader";
 
 //TODO: display a proper loading screen
 //TODO: instead of redirecting to meeting-type, display the meeting list here
@@ -88,15 +87,11 @@ function Dashboard() {
     }
   };
 
-  if (loading || isLoading || !SchedulerUser) {
-    return (
-      <div className="flex items-center justify-center container h-[90vh]">
-        <Loader />
-      </div>
-    );
+  if (loading || isLoading || !SchedulerUser || true) {
+    return <div>Loading</div>;
   }
 
-  return <Meetings SchedulerUser={SchedulerUser} />;
+  return <Meetings />;
 }
 
 export default Dashboard;
