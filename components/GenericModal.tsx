@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogOverlay,
 } from '@shadcnComponents/dialog';
 
 import { Button } from '@shadcnComponents/button';
@@ -18,6 +19,8 @@ type Props = {
   description?: string;
   closeBtn?: boolean;
   children?: React.ReactNode;
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
 };
 
 function GenericModal({
@@ -27,12 +30,20 @@ function GenericModal({
   description,
   closeBtn = false,
   children,
+  open,
+  setOpen,
 }: Props) {
   return (
-    <Dialog>
+    <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>{triggerElement}</DialogTrigger>
 
-      <DialogContent style={{ maxWidth: size == 'big' ? '800px' : '400px' }}>
+      <DialogContent
+        style={{
+          maxWidth: size == 'big' ? '800px' : '400px',
+          maxHeight: '800px',
+          overflowY: 'auto',
+        }}
+      >
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}

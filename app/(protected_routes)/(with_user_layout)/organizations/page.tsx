@@ -33,8 +33,8 @@ function Organizations() {
         <p className=''>You can create up to three organizations</p>
 
         <ManageOrganizationModal
-          type='create'
-          current_organization_number={SchedulerUser.organizations.length}
+          action='create'
+          SchedulerUser={SchedulerUser}
         />
       </div>
       <br />

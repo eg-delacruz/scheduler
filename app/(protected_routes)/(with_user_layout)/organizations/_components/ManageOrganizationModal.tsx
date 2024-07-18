@@ -1,5 +1,6 @@
 //Shadcn components
 import GenericModal from '@components/GenericModal';
+import CreateEditModal from './CreateEditModal';
 
 //Components
 import WarningExclamation from '@components/WarningExclamation';
@@ -7,22 +8,20 @@ import WarningExclamation from '@components/WarningExclamation';
 import { Plus } from 'lucide-react';
 
 type Props = {
-  type: 'create' | 'edit';
-  current_organization_number: number;
+  action: 'create' | 'edit';
+  SchedulerUser: SchedulerUser;
 };
 
 //TODO: use sonner toast when creating organization
-function ManageOrganizationModal({ type, current_organization_number }: Props) {
-  console.log(current_organization_number);
-
-  //Triggers
+function ManageOrganizationModal({ action, SchedulerUser }: Props) {
+  //Trigger
   const addOrganizationTrigger = (
     <div className='text-primary-foreground bg-primary rounded-sm p-2 hover:bg-primary/90 cursor-pointer'>
       <Plus />
     </div>
   );
 
-  if (current_organization_number >= 3) {
+  if (SchedulerUser.organizations.length >= 3 && action === 'create') {
     return (
       <GenericModal
         triggerElement={addOrganizationTrigger}
@@ -39,17 +38,9 @@ function ManageOrganizationModal({ type, current_organization_number }: Props) {
         </p>
       </GenericModal>
     );
+  } else {
+    return <CreateEditModal action={action} SchedulerUser={SchedulerUser} />;
   }
-
-  return (
-    <GenericModal
-      triggerElement={addOrganizationTrigger}
-      title='Create organization'
-      description='Anyone who has this link will be able to view this.'
-    >
-      <p>Los childreen</p>
-    </GenericModal>
-  );
 }
 
 export default ManageOrganizationModal;
