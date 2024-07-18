@@ -1,22 +1,23 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from 'react';
 
+//TODO: add the meetings to the context
 type Context = {
   SchedulerUser: SchedulerUser | null;
-  setContext: React.Dispatch<React.SetStateAction<SchedulerUser | null>>;
+  setSchedulerUser: React.Dispatch<React.SetStateAction<SchedulerUser | null>>;
 };
 
 const AppContext = createContext<Context>({
   SchedulerUser: null,
-  setContext: () => {},
+  setSchedulerUser: () => {},
 });
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
-  let [state, setState] = useState<SchedulerUser | null>(null);
+  let [SchedulerUser, setSchedulerUser] = useState<SchedulerUser | null>(null);
 
   return (
-    <AppContext.Provider value={{ SchedulerUser: state, setContext: setState }}>
+    <AppContext.Provider value={{ SchedulerUser, setSchedulerUser }}>
       {children}
     </AppContext.Provider>
   );

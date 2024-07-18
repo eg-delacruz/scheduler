@@ -55,11 +55,17 @@ function SideNavBar() {
   return (
     <div className='p-5 py-14'>
       <Link href={'/'} className='flex justify-center'>
-        <Image src='/logo.png' width={150} height={150} alt='Logo' />
+        <Image
+          src='/logo.png'
+          width={150}
+          height={150}
+          alt='Logo'
+          className='mt-3'
+        />
       </Link>
 
       <Link href={'/create-meeting'}>
-        <Button className='flex gap-2 w-full rounded-full mt-7'>
+        <Button className='flex gap-2 w-full rounded-full mt-10'>
           {' '}
           <Plus />
           Create

@@ -25,7 +25,8 @@
       "@utils/*": ["./utils/*"],
       "@email/*": ["./emails/*"],
       "@context/*": ["./context/*"],
-      "@shadcnComponents/*": ["./shadcn/ui/*"]
+      "@shadcnComponents/*": ["./shadcn/ui/*"],
+      "@hooks/*": ["./hooks/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
