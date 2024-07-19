@@ -6,6 +6,7 @@ import useSecureRoute from '@hooks/useSecureRoute';
 
 //Components
 import Loader from '@components/Loader';
+import OrganizationsTable from './_components/OrganizationsTable';
 
 //Shadcn components
 import ManageOrganizationModal from './_components/ManageOrganizationModal';
@@ -26,20 +27,22 @@ function Organizations() {
   }
 
   return (
-    <div className='p-5'>
-      <h2 className='font-bold text-3xl'>Organizations</h2>
-      <br />
-      <div className='flex justify-between items-center'>
-        <p className=''>You can create up to three organizations</p>
+    <div className='p-5 pt-6'>
+      <div className='pb-2 flex flex-col gap-2'>
+        <h2 className='font-bold text-3xl'>Organizations</h2>
 
-        <ManageOrganizationModal
-          action='create'
-          SchedulerUser={SchedulerUser}
-        />
+        <div className='flex justify-between items-center'>
+          <p className=''>You can create up to three organizations</p>
+
+          <ManageOrganizationModal
+            action='create'
+            SchedulerUser={SchedulerUser}
+          />
+        </div>
       </div>
-      <br />
+
       <hr />
-      <br />
+      <OrganizationsTable />
     </div>
   );
 }
