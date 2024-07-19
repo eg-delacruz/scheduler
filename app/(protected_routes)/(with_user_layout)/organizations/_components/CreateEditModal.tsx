@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 //Components
 import GenericModal from '@components/GenericModal';
+import SpinnerLoader from '@components/SpinnerLoader';
 
 //Shadcn components
 import { Input } from '@shadcnComponents/input';
@@ -11,11 +12,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@shadcnComponents/dropdown-menu';
 import { Button } from '@shadcnComponents/button';
 import { Checkbox } from '@shadcnComponents/checkbox';
+import { toast } from 'sonner';
 
 //Icons
 import { Plus } from 'lucide-react';
@@ -23,34 +24,103 @@ import { Plus } from 'lucide-react';
 //Utils
 import DaysList from '@utils/DaysList';
 
+//Firestore
+import { doc, updateDoc, getFirestore } from 'firebase/firestore';
+import { app } from '@config/FirebaseConfig';
+
+//Context
+import { useAppContext } from '@context/index';
+
 type Props = {
   action: 'create' | 'edit';
-  SchedulerUser: SchedulerUser;
 };
 
-function CreateEditModal({ action, SchedulerUser }: Props) {
+function CreateEditModal({ action }: Props) {
   //States
   const [openCreateEditOrgModal, setOpenCreateEditOrgModal] =
     useState<boolean>(false);
-
   const [name, setName] = useState<string>('');
   const [type, setType] = useState<string>('Business');
   const [daysAvailable, setDaysAvailable] = useState<{
     [key: string]: boolean;
   }>({
-    Monday: false,
-    Tuesday: false,
-    Wednesday: false,
-    Thursday: false,
-    Friday: false,
+    Monday: true,
+    Tuesday: true,
+    Wednesday: true,
+    Thursday: true,
+    Friday: true,
     Saturday: false,
     Sunday: false,
   });
   const [startTime, setStartTime] = useState<string>('08:00');
   const [endTime, setEndTime] = useState<string>('17:00');
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [formError, setFormError] = useState<string>('');
+
+  //Context
+  const { SchedulerUser, setSchedulerUser } = useAppContext();
+
+  const db = getFirestore(app);
 
   const handleSubmit = async () => {
-    console.log({ name, type, daysAvailable, startTime, endTime });
+    setSubmitting(true);
+    setFormError('');
+
+    //Errors
+    if (!name) {
+      setFormError('Organization name is required');
+      setSubmitting(false);
+      return;
+    }
+
+    if (
+      SchedulerUser?.organizations.some(
+        (organization) => organization.name === name
+      )
+    ) {
+      setFormError('Organization name already exists');
+      setSubmitting(false);
+      return;
+    }
+
+    const organization: Organization = {
+      id: Date.now().toString(),
+      name,
+      type,
+      created_by: SchedulerUser?.email || '',
+      created_at: new Date(),
+      modified_at: new Date(),
+      modified_by: SchedulerUser?.email || '',
+      days_available: daysAvailable,
+      end_time: endTime,
+      start_time: startTime,
+    };
+
+    if (SchedulerUser?.email) {
+      const updatedUser: SchedulerUser = {
+        ...SchedulerUser,
+        organizations: [...SchedulerUser.organizations, organization],
+      };
+
+      if (SchedulerUser.current_organization === null) {
+        updatedUser.current_organization = organization;
+      }
+
+      const docRef = doc(db, 'SchedulerUser', SchedulerUser?.email);
+
+      await updateDoc(docRef, {
+        organizations: updatedUser.organizations,
+        current_organization: updatedUser.current_organization,
+      }).then(() => {
+        setSchedulerUser({
+          ...updatedUser,
+        });
+        console.log('Organization created!');
+        toast('Organization created!');
+      });
+    }
+
+    setSubmitting(false);
     setOpenCreateEditOrgModal(false);
   };
 
@@ -81,7 +151,7 @@ function CreateEditModal({ action, SchedulerUser }: Props) {
 
         <h3 className='font-bold'>General</h3>
         <div>
-          <label className='text-slate-700 mb-2 block'>Organization name</label>
+          <label className='font-bold mb-2 block'>Organization name</label>
           <Input
             onChange={(event) => {
               setName(event.target.value);
@@ -91,21 +161,26 @@ function CreateEditModal({ action, SchedulerUser }: Props) {
         </div>
 
         <div>
-          <label className='text-slate-700 mb-2 block'>Type</label>
+          <label className='font-bold mb-2 block'>Type</label>
           <DropdownMenu>
-            <DropdownMenuTrigger className='block'>
+            <DropdownMenuTrigger className='block' asChild>
               <Button variant='outline' className='max-w-40'>
                 {type}
               </Button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setType('Personal')}>
+              <DropdownMenuItem
+                className='cursor-pointer hover:bg-slate-200'
+                onClick={() => setType('Personal')}
+              >
                 Personal
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setType('Business')}>
-                Company
+              <DropdownMenuItem
+                className='cursor-pointer hover:bg-slate-200'
+                onClick={() => setType('Business')}
+              >
+                Business
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -114,7 +189,7 @@ function CreateEditModal({ action, SchedulerUser }: Props) {
         {/* Availability */}
         <h3 className='font-bold'>Availability</h3>
         <div>
-          <label className='text-slate-700 mb-2 block'>Available days</label>
+          <label className='font-bold mb-2 block'>Available days</label>
           <div className='grid grid-cols-2 md:grid-cols-4 gap-5 my-3'>
             {DaysList.map((item, index) => (
               <div key={index}>
@@ -141,7 +216,7 @@ function CreateEditModal({ action, SchedulerUser }: Props) {
         </div>
 
         <div>
-          <label className='text-slate-700 block'>Available time window</label>
+          <label className='font-bold block'>Available time window</label>
           <div className='flex gap-10'>
             <div className='mt-3'>
               <h5>Start time</h5>
@@ -162,8 +237,19 @@ function CreateEditModal({ action, SchedulerUser }: Props) {
           </div>
         </div>
 
-        <Button className='max-w-28' onClick={handleSubmit}>
-          Save
+        {formError ? (
+          <p className='text-red-600 font-bold'>{formError}</p>
+        ) : (
+          <br />
+        )}
+
+        <Button
+          type='submit'
+          className={`max-w-28 ${submitting && 'opacity-80'}`}
+          onClick={handleSubmit}
+          disabled={submitting}
+        >
+          {submitting ? <SpinnerLoader /> : 'Save'}
         </Button>
       </div>
     </GenericModal>

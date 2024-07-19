@@ -40,7 +40,7 @@ function GenericModal({
       <DialogContent
         style={{
           maxWidth: size == 'big' ? '800px' : '400px',
-          maxHeight: '800px',
+          maxHeight: '600px',
           overflowY: 'auto',
         }}
       >

@@ -31,15 +31,13 @@ interface SchedulerUser {
   email: string | null;
   created_at: Date;
   organizations: Organization[];
-  current_organization: {
-    id: string;
-    name: string;
-  };
+  current_organization: Organization | null;
 }
 
 interface Organization {
-  name: string;
   id: string;
+  name: string;
+  type: string;
   created_by: string;
   created_at: Date;
   modified_at: Date;

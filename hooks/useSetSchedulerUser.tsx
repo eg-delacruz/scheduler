@@ -20,7 +20,6 @@ function useSetSchedulerUser() {
     useState<boolean>(true);
 
   //Context
-  //TODO: check if the context isn't refetched on every page reload when navigating through the website and coming back to the dashboard
   const { SchedulerUser, setSchedulerUser } = useAppContext();
 
   //Logged in user info

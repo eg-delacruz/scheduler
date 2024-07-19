@@ -12,10 +12,7 @@ export default async function createSchedulerUser(
     email: user.email,
     created_at: new Date(),
     organizations: [],
-    current_organization: {
-      id: '',
-      name: '',
-    },
+    current_organization: null,
   };
 
   await setDoc(doc(db, 'SchedulerUser', String(user.email)), created_user);

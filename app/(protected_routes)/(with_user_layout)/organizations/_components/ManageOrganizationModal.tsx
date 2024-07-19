@@ -12,7 +12,6 @@ type Props = {
   SchedulerUser: SchedulerUser;
 };
 
-//TODO: use sonner toast when creating organization
 function ManageOrganizationModal({ action, SchedulerUser }: Props) {
   //Trigger
   const addOrganizationTrigger = (
@@ -39,7 +38,7 @@ function ManageOrganizationModal({ action, SchedulerUser }: Props) {
       </GenericModal>
     );
   } else {
-    return <CreateEditModal action={action} SchedulerUser={SchedulerUser} />;
+    return <CreateEditModal action={action} />;
   }
 }
 
