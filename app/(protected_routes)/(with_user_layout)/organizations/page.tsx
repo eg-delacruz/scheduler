@@ -35,7 +35,7 @@ function Organizations() {
         <h2 className='font-bold text-3xl'>Organizations</h2>
 
         <div className='flex justify-between items-center'>
-          <p className=''>You can create up to three organizations</p>
+          <p className=''>Manage the availability of your organizations</p>
 
           <ManageOrganizationModal
             action='create'

@@ -27,7 +27,6 @@ import { app } from '@config/FirebaseConfig';
 
 //Context
 import { useAppContext } from '@context/index';
-import { open } from 'fs/promises';
 
 type Props = {
   action: 'create' | 'edit';

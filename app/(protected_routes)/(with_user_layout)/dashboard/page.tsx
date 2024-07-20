@@ -14,10 +14,13 @@
 
 // //Context
 // import { useAppContext } from '@context/index';
+import { useState } from 'react';
 
 //Components
-import Meetings from '@/app/(protected_routes)/(with_user_layout)/dashboard/_components/Meetings';
 import Loader from '@components/Loader';
+import NoOrgCreated from './_components/NoOrgCreated';
+import MeetingsFilter from './_components/MeetingsFilter';
+import MeetingsList from './_components/MeetingsList';
 
 //Hooks
 import useSetSchedulerUser from '@hooks/useSetSchedulerUser';
@@ -34,6 +37,20 @@ function Dashboard() {
 
   //Securing route
   const { loadingAuth } = useSecureRoute();
+
+  //States
+  const [loadingChangeCurrentOrg, setLoadingChangeCurrentOrg] =
+    useState<boolean>(false);
+  const [search, setSearch] = useState<string>('');
+
+  const [color1, setColor1] = useState<boolean>(true);
+  const [color2, setColor2] = useState<boolean>(true);
+  const [color3, setColor3] = useState<boolean>(true);
+  const [color4, setColor4] = useState<boolean>(true);
+  const [color5, setColor5] = useState<boolean>(true);
+
+  const colors = [color1, color2, color3, color4, color5];
+  const setColors = [setColor1, setColor2, setColor3, setColor4, setColor5];
 
   //Logged in user info
   // const { user, isLoading, isAuthenticated } = useKindeBrowserClient();
@@ -100,7 +117,23 @@ function Dashboard() {
     );
   }
 
-  return <Meetings SchedulerUser={SchedulerUser} />;
+  if (SchedulerUser.organizations.length == 0) {
+    return <NoOrgCreated />;
+  }
+
+  return (
+    <div className='p-5 pt-6'>
+      <MeetingsFilter
+        setLoading={setLoadingChangeCurrentOrg}
+        loading={loadingChangeCurrentOrg}
+        setSearch={setSearch}
+        search={search}
+        colors={colors}
+        setColors={setColors}
+      />
+      <MeetingsList />
+    </div>
+  );
 }
 
 export default Dashboard;

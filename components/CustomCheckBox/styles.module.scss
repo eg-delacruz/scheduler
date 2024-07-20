@@ -1,0 +1,44 @@
+/* Hide the browser's default checkbox */
+.checkbox {
+  display: none;
+}
+
+.label {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+}
+.label div:first-child {
+  opacity: 0.6;
+}
+.label:hover {
+  opacity: 0.8;
+}
+
+/* Checkbox background when checked */
+// .checkbox:checked + .label::before {
+//   content: '✓';
+//   background-color: gray;
+//   transform: scale(1);
+// }
+.checkbox:checked + .label div:first-child {
+  opacity: 1;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.label::before {
+  background-color: white;
+  color: white;
+  display: block;
+  border-radius: 50%;
+  border: 1px solid gray;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  line-height: 28px;
+  transition-duration: 0.4s;
+  transform: scale(0);
+}

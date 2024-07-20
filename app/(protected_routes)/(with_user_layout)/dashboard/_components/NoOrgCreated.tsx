@@ -5,14 +5,14 @@ import { Plus } from 'lucide-react';
 
 function NoOrgCreated() {
   return (
-    <div className='p-5'>
-      <div className='flex flex-col gap-5'>
+    <div className='p-5 pt-6'>
+      <div className='flex flex-col gap-2'>
         <h2 className='font-bold text-3xl'>Meetings</h2>
+
+        <hr />
       </div>
-      <br />
-      <hr />
-      <br />
-      <div className='border-2 p-5 rounded max-w-xl mx-auto bg-slate-50'>
+
+      <div className='border-2 p-5 rounded max-w-xl mx-auto bg-slate-50 mt-10'>
         <p className='text-center text-xl'>
           You must first create an organization before you can start scheduling
         </p>

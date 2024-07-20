@@ -9,7 +9,14 @@ import { useState, useEffect } from 'react';
 import { Button } from '@shadcnComponents/button';
 
 //This library is installed when we install the shadcn UI lib
-import { Briefcase, Calendar, Clock, Plus, Settings } from 'lucide-react';
+import {
+  Briefcase,
+  Calendar,
+  Clock,
+  Plus,
+  Settings,
+  Building,
+} from 'lucide-react';
 
 function SideNavBar() {
   const menu = [
@@ -18,6 +25,12 @@ function SideNavBar() {
       name: 'Meetings',
       path: '/dashboard',
       icon: Calendar,
+    },
+    {
+      id: 2,
+      name: 'Organizations',
+      path: '/organizations',
+      icon: Building,
     },
     {
       id: 2,
