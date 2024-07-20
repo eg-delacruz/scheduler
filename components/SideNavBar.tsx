@@ -18,6 +18,7 @@ import {
   Building,
 } from 'lucide-react';
 
+//TODO: When clicking on the create button, redirect to /organizations if no organization is created. Otherwise, redirect to /create-meeting
 function SideNavBar() {
   const menu = [
     {

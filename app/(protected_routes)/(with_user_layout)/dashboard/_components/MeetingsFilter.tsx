@@ -1,5 +1,4 @@
 'use client';
-import { useState } from 'react';
 
 //Schaedn components
 import { Input } from '@shadcnComponents/input';
@@ -9,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@shadcnComponents/dropdown-menu';
+import { Tabs, TabsList, TabsTrigger } from '@shadcnComponents/tabs';
 import { Button } from '@shadcnComponents/button';
 
 //Components
@@ -25,31 +25,26 @@ import { app } from '@config/FirebaseConfig';
 //Utils
 import ThemeColor from '@utils/ThemeOptions';
 
-//TODO: make the search bar work
-
-//TODO: when loading, make all elements disabled
-
-//TODO: check mobile responsiveness
 type Props = {
   setLoading: (loading: boolean) => void;
   loading: boolean;
   setSearch: (search: string) => void;
-  search: string;
   colors: boolean[];
   setColors: ((boolean: boolean) => void)[];
+  setScheduled: (scheduled: boolean) => void;
+  setExpiration: (expiration: 'All' | 'Upcoming' | 'Expired') => void;
 };
 function MeetingsFilter({
   loading,
   setLoading,
-  search,
   setSearch,
   colors,
   setColors,
+  setScheduled,
+  setExpiration,
 }: Props) {
   //Context
   const { SchedulerUser, setSchedulerUser } = useAppContext();
-
-  //States
 
   const db = getFirestore(app);
 
@@ -59,7 +54,7 @@ function MeetingsFilter({
   );
 
   //TODO: refetch the meetings here when current organization changes
-  //TODO: set all colors to true when current organization changes
+  //TODO: set all colors to true and all states to its default value when current organization changes (at the very end of the function)
   const handleCurrentOrganization = async (organization: Organization) => {
     setLoading(true);
     if (SchedulerUser?.email) {
@@ -78,7 +73,9 @@ function MeetingsFilter({
 
   //Create/delete states for each color
   const ColorSelector = () => (
-    <div className='flex justify-between gap-2 p-1 border rounded-sm'>
+    <div
+      className={`flex justify-between gap-2 p-1 border rounded-sm max-w-48`}
+    >
       {ThemeColor.map((color, index) => (
         <CustomCheckBox
           boolean={colors[index]}
@@ -86,9 +83,8 @@ function MeetingsFilter({
           name={`color${index}`}
         >
           <div
-            className={`h-7 w-7 rounded-full cursor-pointer ${
-              colors[index] ? 'border-2 border-black' : null
-            }`}
+            className={`h-7 w-7 rounded-full cursor-pointer 
+              ${colors[index] ? 'border-2 border-black' : null}`}
             style={{ backgroundColor: color }}
           ></div>
         </CustomCheckBox>
@@ -100,8 +96,15 @@ function MeetingsFilter({
     <div className='flex flex-col gap-2'>
       <h2 className='font-bold text-3xl'>Meetings</h2>
 
-      <div className='flex justify-between'>
-        <Input placeholder='Search' className='max-w-xs' />
+      <div className='flex justify-between gap-1'>
+        <Input
+          placeholder='Search'
+          className='max-w-xs'
+          onChange={(event) => {
+            setSearch(event.target.value);
+          }}
+          disabled={loading}
+        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild disabled={loading}>
             <Button variant='outline' className='max-w-40'>
@@ -131,15 +134,58 @@ function MeetingsFilter({
         </DropdownMenu>
       </div>
 
-      <div className='flex justify-between'>
+      <div className='flex justify-between flex-col gap-2 sm:flex-row'>
         {<ColorSelector />}
 
-        <div>Scheduler/Unscheduled</div>
+        <Tabs defaultValue='Scheduled'>
+          <TabsList>
+            <TabsTrigger
+              disabled={loading}
+              onClick={() => setScheduled(true)}
+              value='Scheduled'
+            >
+              Scheduled
+            </TabsTrigger>
+            <TabsTrigger
+              disabled={loading}
+              onClick={() => setScheduled(false)}
+              value='Unscheduled'
+            >
+              Unscheduled
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
       <hr />
 
-      <div className='my-2'>All | Upcoming | Expired</div>
+      <div className='my-2'>
+        <Tabs defaultValue='Upcoming'>
+          <TabsList>
+            <TabsTrigger
+              disabled={loading}
+              onClick={() => setExpiration('All')}
+              value='All'
+            >
+              All
+            </TabsTrigger>
+            <TabsTrigger
+              disabled={loading}
+              onClick={() => setExpiration('Upcoming')}
+              value='Upcoming'
+            >
+              Upcoming
+            </TabsTrigger>
+            <TabsTrigger
+              disabled={loading}
+              onClick={() => setExpiration('Expired')}
+              value='Expired'
+            >
+              Expired
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
     </div>
   );
 }

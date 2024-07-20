@@ -12,7 +12,6 @@ import { Button } from '@shadcnComponents/button';
 import { CalendarCheck, Clock, Timer } from 'lucide-react';
 
 //TODO: Properly type this in the global types
-//TODO: Give a nicer look the meetings table
 function ScheduledMeetingList({ meetingList }: { meetingList: any }) {
   return (
     <div>

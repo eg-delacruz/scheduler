@@ -25,6 +25,7 @@ import MeetingsList from './_components/MeetingsList';
 //Hooks
 import useSetSchedulerUser from '@hooks/useSetSchedulerUser';
 import useSecureRoute from '@hooks/useSecureRoute';
+import useDebouncedSearchValue from '@hooks/useDebouncedSearchValue';
 
 //TODO: clean this component just like the /organizations/page.tsx
 //TODO: instead of redirecting to meeting-type, display the meeting list here
@@ -42,6 +43,7 @@ function Dashboard() {
   const [loadingChangeCurrentOrg, setLoadingChangeCurrentOrg] =
     useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
+  const debouncedSearch = useDebouncedSearchValue(search);
 
   const [color1, setColor1] = useState<boolean>(true);
   const [color2, setColor2] = useState<boolean>(true);
@@ -51,6 +53,12 @@ function Dashboard() {
 
   const colors = [color1, color2, color3, color4, color5];
   const setColors = [setColor1, setColor2, setColor3, setColor4, setColor5];
+
+  const [scheduled, setScheduled] = useState<boolean>(true);
+
+  const [expiration, setExpiration] = useState<'All' | 'Upcoming' | 'Expired'>(
+    'Upcoming'
+  );
 
   //Logged in user info
   // const { user, isLoading, isAuthenticated } = useKindeBrowserClient();
@@ -127,9 +135,10 @@ function Dashboard() {
         setLoading={setLoadingChangeCurrentOrg}
         loading={loadingChangeCurrentOrg}
         setSearch={setSearch}
-        search={search}
         colors={colors}
         setColors={setColors}
+        setScheduled={setScheduled}
+        setExpiration={setExpiration}
       />
       <MeetingsList />
     </div>
