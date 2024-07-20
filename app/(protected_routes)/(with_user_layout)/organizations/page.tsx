@@ -11,6 +11,9 @@ import OrganizationsTable from './_components/OrganizationsTable';
 //Shadcn components
 import ManageOrganizationModal from './_components/ManageOrganizationModal';
 
+//Icons
+import { Plus } from 'lucide-react';
+
 function Organizations() {
   //Context
   const { loadingSchedulerUser, SchedulerUser } = useSetSchedulerUser();
@@ -37,6 +40,11 @@ function Organizations() {
           <ManageOrganizationModal
             action='create'
             SchedulerUser={SchedulerUser}
+            triggerElement={
+              <div className='text-primary-foreground bg-primary rounded-sm p-2 hover:bg-primary/90 cursor-pointer'>
+                <Plus />
+              </div>
+            }
           />
         </div>
       </div>

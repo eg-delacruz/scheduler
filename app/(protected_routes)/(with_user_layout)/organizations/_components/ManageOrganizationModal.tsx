@@ -3,25 +3,23 @@ import GenericModal from '@components/GenericModal';
 import CreateEditModal from './CreateEditModal';
 import WarningExclamation from '@components/WarningExclamation';
 
-import { Plus } from 'lucide-react';
-
 type Props = {
   action: 'create' | 'edit';
   SchedulerUser: SchedulerUser;
+  triggerElement: React.ReactNode;
+  organization_id?: string;
 };
 
-function ManageOrganizationModal({ action, SchedulerUser }: Props) {
-  //Trigger
-  const addOrganizationTrigger = (
-    <div className='text-primary-foreground bg-primary rounded-sm p-2 hover:bg-primary/90 cursor-pointer'>
-      <Plus />
-    </div>
-  );
-
+function ManageOrganizationModal({
+  action,
+  SchedulerUser,
+  triggerElement,
+  organization_id,
+}: Props) {
   if (SchedulerUser.organizations.length >= 3 && action === 'create') {
     return (
       <GenericModal
-        triggerElement={addOrganizationTrigger}
+        triggerElement={triggerElement}
         title='Maximum organizations reached'
         closeBtn={true}
         size='small'
@@ -36,7 +34,13 @@ function ManageOrganizationModal({ action, SchedulerUser }: Props) {
       </GenericModal>
     );
   } else {
-    return <CreateEditModal action={action} />;
+    return (
+      <CreateEditModal
+        triggerElement={triggerElement}
+        action={action}
+        organization_id={organization_id}
+      />
+    );
   }
 }
 

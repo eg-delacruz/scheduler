@@ -5,11 +5,12 @@ import { useAppContext } from '@context/index';
 import { Clock, Pen } from 'lucide-react';
 
 //Components
+import ManageOrganizationModal from './ManageOrganizationModal';
 import DeleteOrganizationModal from './DeleteOrganizationModal';
 
 function OrganizationsTable() {
   const organizations = useAppContext().SchedulerUser?.organizations;
-  const user = useAppContext().SchedulerUser;
+  const SchedulerUser = useAppContext().SchedulerUser;
 
   const AvailableDays = ({
     available_days,
@@ -58,45 +59,54 @@ function OrganizationsTable() {
     );
   }
 
-  return (
-    <div className='pt-4 max-w-3xl mx-auto flex flex-col gap-4'>
-      {organizations?.map((organization) => (
-        <div
-          className='border shadow-md border-t-8 rounded-lg p-5 flex flex-col gap-3 border-t-blue-500'
-          key={organization.id}
-        >
-          <div className='flex justify-between'>
-            <h4 className='font-medium'>{organization.name}</h4>
+  if (SchedulerUser) {
+    return (
+      <div className='pt-4 max-w-3xl mx-auto flex flex-col gap-4'>
+        {organizations?.map((organization) => (
+          <div
+            className='border shadow-md border-t-8 rounded-lg p-5 flex flex-col gap-3 border-t-blue-500'
+            key={organization.id}
+          >
+            <div className='flex justify-between'>
+              <h4 className='font-medium'>{organization.name}</h4>
 
-            <div className='flex justify-between gap-1'>
-              <div className='cursor-pointer p-1 hover:bg-blue-400 rounded-sm hover:text-white'>
-                <Pen />
+              <div className='flex justify-between gap-1'>
+                <ManageOrganizationModal
+                  triggerElement={
+                    <div className='cursor-pointer p-1 hover:bg-blue-400 rounded-sm hover:text-white'>
+                      <Pen />
+                    </div>
+                  }
+                  action='edit'
+                  SchedulerUser={SchedulerUser}
+                  organization_id={organization.id}
+                />
+
+                <DeleteOrganizationModal organization={organization} />
               </div>
+            </div>
 
-              <DeleteOrganizationModal organization={organization} />
+            <div>
+              <span>Type: </span>
+              <span className='p-1 bg-slate-200 rounded-sm'>
+                {organization.type}
+              </span>
+            </div>
+
+            <hr />
+
+            <div className='flex justify-between xs:flex-row flex-col xs'>
+              <div className='flex gap-2'>
+                <Clock className='text-gray-400' />
+                {organization.start_time} - {organization.end_time}
+              </div>
+              {<AvailableDays available_days={organization?.days_available} />}
             </div>
           </div>
-
-          <div>
-            <span>Type: </span>
-            <span className='p-1 bg-slate-200 rounded-sm'>
-              {organization.type}
-            </span>
-          </div>
-
-          <hr />
-
-          <div className='flex justify-between xs:flex-row flex-col xs'>
-            <div className='flex gap-2'>
-              <Clock className='text-gray-400' />
-              {organization.start_time} - {organization.end_time}
-            </div>
-            {<AvailableDays available_days={organization?.days_available} />}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+        ))}
+      </div>
+    );
+  }
 }
 
 export default OrganizationsTable;

@@ -51,6 +51,7 @@ function DeleteOrganizationModal({ organization }: Props) {
           organizations: updatedOrganizations,
         };
 
+        //If the organization being deleted is the current organization, set the current organization to the first organization in the list
         if (organization.id === SchedulerUser?.current_organization?.id) {
           if (updatedOrganizations.length > 0) {
             updatedUser.current_organization = updatedOrganizations[0];
