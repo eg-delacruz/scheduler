@@ -1,8 +1,6 @@
-//Shadcn components
+//Components
 import GenericModal from '@components/GenericModal';
 import CreateEditModal from './CreateEditModal';
-
-//Components
 import WarningExclamation from '@components/WarningExclamation';
 
 import { Plus } from 'lucide-react';

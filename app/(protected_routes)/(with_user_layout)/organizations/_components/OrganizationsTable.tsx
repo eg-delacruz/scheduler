@@ -2,24 +2,14 @@
 import { useAppContext } from '@context/index';
 
 //Icons
-import { Clock, Settings, Pen, Trash } from 'lucide-react';
+import { Clock, Pen } from 'lucide-react';
 
-//Shadcn components
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@shadcnComponents/dropdown-menu';
+//Components
+import DeleteOrganizationModal from './DeleteOrganizationModal';
 
 function OrganizationsTable() {
   const organizations = useAppContext().SchedulerUser?.organizations;
-
-  const onDeleteOrganization = (organizationId: string) => {
-    const updatedOrganizations = organizations?.filter(
-      (organization) => organization.id !== organizationId
-    );
-  };
+  const user = useAppContext().SchedulerUser;
 
   const AvailableDays = ({
     available_days,
@@ -78,24 +68,15 @@ function OrganizationsTable() {
           <div className='flex justify-between'>
             <h4 className='font-medium'>{organization.name}</h4>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Settings className='cursor-pointer' />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem className='flex gap-2'>
-                  <Pen /> Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => onDeleteOrganization(organization.id)}
-                  className='flex gap-2'
-                >
-                  <Trash />
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className='flex justify-between gap-1'>
+              <div className='cursor-pointer p-1 hover:bg-blue-400 rounded-sm hover:text-white'>
+                <Pen />
+              </div>
+
+              <DeleteOrganizationModal organization={organization} />
+            </div>
           </div>
+
           <div>
             <span>Type: </span>
             <span className='p-1 bg-slate-200 rounded-sm'>
