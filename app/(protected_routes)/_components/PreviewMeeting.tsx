@@ -14,6 +14,7 @@ function PreviewMeeting({
   formValue:
     | {
         eventName: string;
+        organizationName: string;
         duration: number;
         locationType: string;
         locationUrl: string;
@@ -73,9 +74,9 @@ function PreviewMeeting({
         <div className='grid grid-cols-1 md:grid-cols-3 mt-5'>
           {/* Meeting info */}
           <div className='p-4 border-r'>
-            <p>Business Name</p>
+            <p className='font-bold'>{formValue?.organizationName}</p>
             <h2 className='font-bold text-2xl'>
-              {formValue?.eventName ? formValue?.eventName : 'Meeting Name'}
+              {formValue?.eventName ? formValue?.eventName : 'Meeting Title'}
             </h2>
             <div className='mt-5 flex flex-col gap-4'>
               <p className='flex gap-2'>

@@ -21,21 +21,37 @@ import LocationOptions from '@utils/LocationOptions';
 import ThemeOptions from '@/utils/ThemeOptions';
 
 //Firestore DB
-import { doc, getFirestore, setDoc } from 'firebase/firestore';
+import { doc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
 import { app } from '@config/FirebaseConfig';
 
 //Auth user data
-import { LoginLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
+import { LoginLink } from '@kinde-oss/kinde-auth-nextjs';
 
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
-function MeetingForm({ setFormValue }: { setFormValue: Function }) {
+//TODO: make this component reusable for both the create-meeting and edit-meeting pages
+function MeetingForm({
+  setFormValue,
+  SchedulerUser,
+  setSchedulerUser,
+}: {
+  setFormValue: Function;
+  SchedulerUser: SchedulerUser;
+  setSchedulerUser: Function;
+}) {
   //Input states
-  const [eventName, setEventName] = useState<string>();
+  const [eventName, setEventName] = useState<string>('');
+  const [selectedOrganization, setSelectedOrganization] = useState<{
+    organization_id: string;
+    organization_name: string;
+  }>({
+    organization_id: SchedulerUser?.current_organization?.id ?? '',
+    organization_name: SchedulerUser?.current_organization?.name ?? '',
+  });
   const [duration, setDuration] = useState<number>(30);
-  const [locationType, setLocationType] = useState<string>();
-  const [locationUrl, setLocationUrl] = useState<string>();
+  const [locationType, setLocationType] = useState<string>('');
+  const [locationUrl, setLocationUrl] = useState<string>('');
   const [themeColor, setThemeColor] = useState<string>(ThemeOptions[0]);
 
   const [loginError, setLoginError] = useState<boolean>(false);
@@ -43,19 +59,29 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
   const [validPhone, setValidPhone] = useState<string>('');
   const [creating, setCreating] = useState<boolean>(false);
 
-  const { user } = useKindeBrowserClient();
-
   const db = getFirestore(app);
+
+  const filteredOrganizations = SchedulerUser.organizations.filter(
+    (organization) => organization.id !== selectedOrganization.organization_id
+  );
 
   useEffect(() => {
     setFormValue({
       eventName,
+      organizationName: selectedOrganization.organization_name,
       duration,
       locationType,
       locationUrl,
       themeColor,
     });
-  }, [eventName, duration, locationType, locationUrl, themeColor]);
+  }, [
+    eventName,
+    selectedOrganization,
+    duration,
+    locationType,
+    locationUrl,
+    themeColor,
+  ]);
 
   const router = useRouter();
 
@@ -63,13 +89,7 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
     setLoginError(false);
     setCreating(true);
     setValidUrl('');
-
-    //Handling errors
-    if (!user?.email) {
-      setLoginError(true);
-      setCreating(false);
-      return;
-    }
+    setValidPhone('');
 
     //Validating the URL
     const urlRegex = new RegExp(
@@ -89,23 +109,78 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
       return;
     }
 
-    //We generate an id based on the current timestamp
-    const id = Date.now().toString();
-    await setDoc(doc(db, 'MeetingEvent', id), {
-      id,
-      eventName,
+    const meeting: Meeting = {
+      id: Date.now().toString(),
+      organization_id: selectedOrganization.organization_id,
+      created_by: SchedulerUser?.email ?? '',
+      created_at: new Date(),
+      modified_at: new Date(),
+      modified_by: SchedulerUser?.email ?? '',
+      status: 'unscheduled',
       duration,
-      locationType,
-      locationUrl,
-      themeColor,
-      createdBy: user?.email,
-      //We reference this event to the corresponding business
-      businessId: doc(db, 'Business', user?.email),
-    }).then(() => {
+      meeting_title: eventName,
+      location_platform: locationType,
+      location_url_phone: locationUrl,
+      theme_color: themeColor,
+      organization_email: SchedulerUser?.email ?? '',
+      organization_name: selectedOrganization.organization_name,
+      formated_date: '',
+      formated_timestamp: '',
+      date: null,
+      time: '',
+      appointee_email: '',
+      appointee_name: '',
+      appointee_note: '',
+    };
+
+    //We generate an id based on the current timestamp
+    // const id = Date.now().toString();
+    // await setDoc(doc(db, 'MeetingEvent', id), {
+    //   id,
+    //   eventName,
+    //   duration,
+    //   locationType,
+    //   locationUrl,
+    //   themeColor,
+    //   createdBy: user?.email,
+    //   //We reference this event to the corresponding business
+    //   businessId: doc(db, 'Business', user?.email),
+    // }).then(() => {
+    //   setCreating(false);
+    //   //TODO: "New Meeting for the organization org_name created" toast
+    //   toast('New Meeting Event Created');
+    //   //TODO: redirect to dashboard
+    //   router.replace('/dashboard/meeting-type');
+    // });
+    await setDoc(doc(db, 'Meeting', meeting.id), meeting).then(async () => {
+      //If the current organization is different from the selected organization, we update the current organization
+      if (
+        SchedulerUser.current_organization?.id !==
+          selectedOrganization.organization_id &&
+        SchedulerUser?.email
+      ) {
+        //Get the new current organization
+        const newCurrentOrganization = SchedulerUser.organizations.find(
+          (organization) =>
+            organization.id === selectedOrganization.organization_id
+        );
+
+        if (newCurrentOrganization) {
+          const docRef = doc(db, 'SchedulerUser', SchedulerUser?.email);
+          await updateDoc(docRef, {
+            current_organization: newCurrentOrganization,
+          }).then(() => {
+            setSchedulerUser({
+              ...SchedulerUser,
+              current_organization: newCurrentOrganization,
+            });
+            //TODO: Refetch the meetings list here, since the current org changed and will always need to refetch them
+          });
+        }
+      }
       setCreating(false);
-      toast('New Meeting Event Created');
-      //TODO: redirect to dashboard
-      router.replace('/dashboard/meeting-type');
+      toast(`Meeting for ${selectedOrganization.organization_name} created`);
+      router.replace('/dashboard');
     });
   };
 
@@ -122,11 +197,40 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
       </div>
 
       <div className='flex flex-col gap-3 my-4'>
-        <p className='font-bold'>Event Name *</p>
+        <p className='font-bold'>Meeting Title *</p>
         <Input
-          placeholder='Name of your meeting event'
+          placeholder='Title of your meeting'
           onChange={(event) => setEventName(event.target.value)}
         />
+
+        <p className='font-bold'>Organization *</p>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant='outline' className='max-w-40'>
+              <div className='flex justify-between'>
+                <div>{selectedOrganization.organization_name}</div>
+              </div>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {filteredOrganizations.map(
+              (organization): React.ReactNode => (
+                <DropdownMenuItem
+                  key={organization.id}
+                  onClick={() =>
+                    setSelectedOrganization({
+                      organization_id: organization.id,
+                      organization_name: organization.name,
+                    })
+                  }
+                >
+                  {organization.name}
+                </DropdownMenuItem>
+              )
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <p className='font-bold'>Duration *</p>
 
@@ -209,7 +313,7 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
           </>
         ) : null}
 
-        <p className='font-bold'>Select Theme Color</p>
+        <p className='font-bold'>Theme Color</p>
         <div className='flex justify-evenly'>
           {ThemeOptions.map((color, index) => (
             <div
@@ -225,7 +329,12 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
       </div>
       <Button
         disabled={
-          !eventName || !duration || !locationType || !locationUrl || creating
+          !eventName ||
+          !duration ||
+          !locationType ||
+          !locationUrl ||
+          creating ||
+          !selectedOrganization.organization_name
         }
         className='w-full mt-9'
         onClick={handleSubmit}

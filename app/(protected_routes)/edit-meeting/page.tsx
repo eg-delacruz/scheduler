@@ -11,10 +11,8 @@ import Loader from '@components/Loader';
 import useSecureRoute from '@hooks/useSecureRoute';
 import useSetSchedulerUser from '@hooks/useSetSchedulerUser';
 
-//Context
-import { useAppContext } from '@context/index';
-
-function CreateMeeting() {
+//TODO: Make the MeetingForm and PreviewMeeting components reusable for editing a meeting
+function EditMeeting() {
   //States
   const [formValue, setFormValue] = useState<
     | {
@@ -34,9 +32,6 @@ function CreateMeeting() {
   //User
   const { SchedulerUser, loadingSchedulerUser } = useSetSchedulerUser();
 
-  //Context
-  const { setSchedulerUser } = useAppContext();
-
   if (loadingAuth || loadingSchedulerUser) {
     return (
       <div className='flex items-center justify-center container h-[90vh]'>
@@ -46,24 +41,8 @@ function CreateMeeting() {
   }
 
   if (SchedulerUser) {
-    return (
-      <div className='grid grid-cols-1 md:grid-cols-3'>
-        {/* Meeting form */}
-        <div className='shadow-md border md:h-screen'>
-          <MeetingForm
-            setFormValue={setFormValue}
-            SchedulerUser={SchedulerUser}
-            setSchedulerUser={setSchedulerUser}
-          />
-        </div>
-
-        {/* Preview */}
-        <div className='md:col-span-2'>
-          <PreviewMeeting formValue={formValue} />
-        </div>
-      </div>
-    );
+    return <div>EditMeeting</div>;
   }
 }
 
-export default CreateMeeting;
+export default EditMeeting;

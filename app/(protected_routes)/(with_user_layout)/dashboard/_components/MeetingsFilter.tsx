@@ -1,6 +1,6 @@
 'use client';
 
-//Schaedn components
+//Schadcn components
 import { Input } from '@shadcnComponents/input';
 import {
   DropdownMenu,
@@ -38,7 +38,6 @@ type Props = {
   setExpiration: (expiration: 'All' | 'Upcoming' | 'Expired') => void;
 };
 
-//TODO: Add a arrow down (chevron down) icon to the dropdown menu of the current organization
 function MeetingsFilter({
   loading,
   setLoading,

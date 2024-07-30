@@ -29,6 +29,7 @@ import useDebouncedSearchValue from '@hooks/useDebouncedSearchValue';
 
 //TODO: clean this component just like the /organizations/page.tsx
 //TODO: instead of redirecting to meeting-type, display the meeting list here
+//TODO: When the component mounts, check if the current organization has changed. If so, update the meetings displayed (and set a loading)
 function Dashboard() {
   //Context
   //const { SchedulerUser, setSchedulerUser } = useAppContext();
