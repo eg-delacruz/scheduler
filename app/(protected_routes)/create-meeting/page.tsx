@@ -5,8 +5,13 @@ import { useState } from 'react';
 //Components
 import MeetingForm from './_components/MeetingForm';
 import PreviewMeeting from './_components/PreviewMeeting';
+import Loader from '@components/Loader';
+
+//Hooks
+import useSecureRoute from '@hooks/useSecureRoute';
 
 function CreateMeeting() {
+  //States
   const [formValue, setFormValue] = useState<
     | {
         eventName: string;
@@ -17,6 +22,17 @@ function CreateMeeting() {
       }
     | undefined
   >();
+
+  //Securing route
+  const { loadingAuth } = useSecureRoute();
+
+  if (loadingAuth) {
+    return (
+      <div className='flex items-center justify-center container h-[90vh]'>
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-3'>

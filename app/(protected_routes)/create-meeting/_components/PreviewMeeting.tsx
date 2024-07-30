@@ -65,7 +65,7 @@ function PreviewMeeting({
             <Image src={'/logo.png'} height={30} width={110} alt='Logo' />
           </div>
           <div className='p-1 bg-gray-200 rounded-sm mr-4'>
-            <div className='px-3 py-1.5 shadow-sm rounded-sm bg-white text-sm'>
+            <div className='px-3 py-1.5 shadow-sm rounded-sm bg-white text-sm font-bold'>
               Unscheduled
             </div>
           </div>

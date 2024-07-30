@@ -30,12 +30,6 @@ import { LoginLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
-//TODO: If the Location is phone, allow the user to add a phone number and avoid the valid URL check. As placeholder, add 'Add your Phone Number'
-//TODO: Check how long is the session in Kinde
-//TODO: Check the loggin error within a useEffect?
-//TODO: Redirect to login if the user is not logged in instead of the home page
-//TODO: If there is a login error, save the form values in the local storage until the user is logged in again and goes to create meeting form again
-//TODO: Design and add a scheduled | unscheduled status sign
 function MeetingForm({ setFormValue }: { setFormValue: Function }) {
   //Input states
   const [eventName, setEventName] = useState<string>();
@@ -46,6 +40,7 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
 
   const [loginError, setLoginError] = useState<boolean>(false);
   const [validUrl, setValidUrl] = useState<string>('');
+  const [validPhone, setValidPhone] = useState<string>('');
   const [creating, setCreating] = useState<boolean>(false);
 
   const { user } = useKindeBrowserClient();
@@ -80,8 +75,16 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
     const urlRegex = new RegExp(
       '^(https?://)(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?$'
     );
-    if (!urlRegex.test(String(locationUrl))) {
+    if (!urlRegex.test(String(locationUrl)) && locationType !== 'Phone') {
       setValidUrl('Please enter a valid URL starting with http or https');
+      setCreating(false);
+      return;
+    }
+
+    //Validating the phone number by checking that it only contains numbers
+    const phoneRegex = new RegExp('^[0-9]*$');
+    if (!phoneRegex.test(String(locationUrl)) && locationType === 'Phone') {
+      setValidPhone('Please enter a valid phone number');
       setCreating(false);
       return;
     }
@@ -101,6 +104,7 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
     }).then(() => {
       setCreating(false);
       toast('New Meeting Event Created');
+      //TODO: redirect to dashboard
       router.replace('/dashboard/meeting-type');
     });
   };
@@ -177,14 +181,29 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
 
         {locationType ? (
           <>
-            <p className='font-bold'>Add {locationType} Url *</p>
+            <p className='font-bold'>
+              {locationType === 'Phone' ? (
+                <>Add your phone number *</>
+              ) : (
+                <>Add {locationType} Url *</>
+              )}
+            </p>
             <Input
-              placeholder='Add Url'
+              placeholder={
+                locationType === 'Phone'
+                  ? 'Phone number'
+                  : 'URL of your meeting'
+              }
               onChange={(event) => setLocationUrl(event.target.value)}
             />
             {validUrl && (
               <p className='text-red-500 mt-2 bg-red-50 p-1 rounded-sm'>
                 {validUrl}
+              </p>
+            )}
+            {validPhone && (
+              <p className='text-red-500 mt-2 bg-red-50 p-1 rounded-sm'>
+                {validPhone}
               </p>
             )}
           </>
