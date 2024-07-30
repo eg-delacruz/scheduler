@@ -3,13 +3,11 @@ import { useEffect, useState } from 'react';
 
 //Icons library
 import { Clock, MapPin } from 'lucide-react';
-import Link from 'next/link';
 
 //Shadcn UI components
 import { Calendar } from '@shadcnComponents/calendar';
 import { Button } from '@shadcnComponents/button';
 
-//TODO: under preview, add a small description telling the user that he shouldn't change the date and time. Also maybe say that that is what the other person will see when scheduling a meeting with the user
 function PreviewMeeting({
   formValue,
 }: {
@@ -54,34 +52,48 @@ function PreviewMeeting({
   return (
     <>
       <h2 className='font-bold text-2xl m-4'>Preview</h2>
+      <p className='ml-4'>
+        This is how your meeting will look like for the person scheduling a
+        meeting with you. Don't try to change the date and time.
+      </p>
       <div
         className='p-5 py-9 shadow-lg m-5 border-t-8'
         style={{ borderTopColor: formValue?.themeColor }}
       >
-        <Image src={'/logo.png'} height={20} width={90} alt='Logo' />
+        <div className='flex justify-between'>
+          <div>
+            <Image src={'/logo.png'} height={30} width={110} alt='Logo' />
+          </div>
+          <div className='p-1 bg-gray-200 rounded-sm mr-4'>
+            <div className='px-3 py-1.5 shadow-sm rounded-sm bg-white text-sm'>
+              Unscheduled
+            </div>
+          </div>
+        </div>
         <div className='grid grid-cols-1 md:grid-cols-3 mt-5'>
           {/* Meeting info */}
           <div className='p-4 border-r'>
-            <h2>Business Name</h2>
+            <p>Business Name</p>
             <h2 className='font-bold text-2xl'>
               {formValue?.eventName ? formValue?.eventName : 'Meeting Name'}
             </h2>
             <div className='mt-5 flex flex-col gap-4'>
-              <h2 className='flex gap-2'>
+              <p className='flex gap-2'>
                 <Clock />
                 {formValue?.duration} Min
-              </h2>
-              <h2 className='flex gap-2'>
+              </p>
+              <p className='flex gap-2'>
                 <MapPin />
                 {formValue?.locationType} Meeting
-              </h2>
+              </p>
               {/* TODO: Use a instead of link to avoid error when typing https:// in production. If error persists, just use a normal p and style it to make it look like a URL */}
-              <Link
+              {/* TODO: Erase this TODO after making sure the error doesn't ocure in production */}
+              <a
                 className='text-primary text-ellipsis block whitespace-nowrap overflow-hidden'
                 href={formValue?.locationUrl ?? ''}
               >
                 {formValue?.locationUrl}
-              </Link>
+              </a>
             </div>
           </div>
 

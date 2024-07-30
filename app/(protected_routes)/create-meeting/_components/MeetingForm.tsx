@@ -35,6 +35,7 @@ import { useRouter } from 'next/navigation';
 //TODO: Check the loggin error within a useEffect?
 //TODO: Redirect to login if the user is not logged in instead of the home page
 //TODO: If there is a login error, save the form values in the local storage until the user is logged in again and goes to create meeting form again
+//TODO: Design and add a scheduled | unscheduled status sign
 function MeetingForm({ setFormValue }: { setFormValue: Function }) {
   //Input states
   const [eventName, setEventName] = useState<string>();
@@ -107,23 +108,23 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
   return (
     <div className='p-8'>
       <Link href={'/dashboard'}>
-        <h2 className='flex gap-2'>
+        <p className='flex gap-2'>
           <ChevronLeft /> Cancel
-        </h2>
+        </p>
       </Link>
       <div className='mt-4'>
-        <h2 className='font-bold text-2xl my-4'>Create New Event</h2>
+        <h3 className='font-bold text-2xl my-4'>Create New Event</h3>
         <hr />
       </div>
 
       <div className='flex flex-col gap-3 my-4'>
-        <h2 className='font-bold'>Event Name *</h2>
+        <p className='font-bold'>Event Name *</p>
         <Input
           placeholder='Name of your meeting event'
           onChange={(event) => setEventName(event.target.value)}
         />
 
-        <h2 className='font-bold'>Duration *</h2>
+        <p className='font-bold'>Duration *</p>
 
         <DropdownMenu>
           {/* The asChild prop of the Trigger merges the props of the passed child with the ones of the Trigger compo. */}
@@ -149,7 +150,7 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <h2 className='font-bold'>Location *</h2>
+        <p className='font-bold'>Location *</p>
         <div className='grid grid-cols-4 gap-3'>
           {LocationOptions.map(
             (option, index): React.ReactNode => (
@@ -168,7 +169,7 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
                   width={30}
                   height={30}
                 />
-                <h2>{option.name}</h2>
+                <p>{option.name}</p>
               </div>
             )
           )}
@@ -176,7 +177,7 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
 
         {locationType ? (
           <>
-            <h2 className='font-bold'>Add {locationType} Url *</h2>
+            <p className='font-bold'>Add {locationType} Url *</p>
             <Input
               placeholder='Add Url'
               onChange={(event) => setLocationUrl(event.target.value)}
@@ -189,7 +190,7 @@ function MeetingForm({ setFormValue }: { setFormValue: Function }) {
           </>
         ) : null}
 
-        <h2 className='font-bold'>Select Theme Color</h2>
+        <p className='font-bold'>Select Theme Color</p>
         <div className='flex justify-evenly'>
           {ThemeOptions.map((color, index) => (
             <div

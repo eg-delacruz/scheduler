@@ -25,6 +25,9 @@ import { app } from '@config/FirebaseConfig';
 //Utils
 import ThemeColor from '@utils/ThemeOptions';
 
+//Icons
+import { ChevronDown } from 'lucide-react';
+
 type Props = {
   setLoading: (loading: boolean) => void;
   loading: boolean;
@@ -34,6 +37,8 @@ type Props = {
   setScheduled: (scheduled: boolean) => void;
   setExpiration: (expiration: 'All' | 'Upcoming' | 'Expired') => void;
 };
+
+//TODO: Add a arrow down (chevron down) icon to the dropdown menu of the current organization
 function MeetingsFilter({
   loading,
   setLoading,
@@ -113,7 +118,10 @@ function MeetingsFilter({
                   <SpinnerLoader color='blue' />
                 </div>
               ) : (
-                SchedulerUser?.current_organization?.name
+                <div className='flex justify-between'>
+                  <div>{SchedulerUser?.current_organization?.name}</div>
+                  <ChevronDown />
+                </div>
               )}
             </Button>
           </DropdownMenuTrigger>
