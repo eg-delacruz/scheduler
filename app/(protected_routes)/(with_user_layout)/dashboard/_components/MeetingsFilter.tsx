@@ -38,6 +38,7 @@ type Props = {
   setExpiration: (expiration: 'All' | 'Upcoming' | 'Expired') => void;
 };
 
+//TODO: only show the Upcoming and Expired tabs when the Scheduled tab is selected
 function MeetingsFilter({
   loading,
   setLoading,

@@ -8,6 +8,7 @@ import { Clock, MapPin } from 'lucide-react';
 import { Calendar } from '@shadcnComponents/calendar';
 import { Button } from '@shadcnComponents/button';
 
+//TODO: make this component reusable for editing as well
 function PreviewMeeting({
   formValue,
 }: {

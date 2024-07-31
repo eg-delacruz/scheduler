@@ -12,8 +12,6 @@
 // //Utils
 // import createSchedulerUser from '@utils/createSchedulerUser';
 
-// //Context
-// import { useAppContext } from '@context/index';
 import { useState } from 'react';
 
 //Components
@@ -26,16 +24,25 @@ import MeetingsList from './_components/MeetingsList';
 import useSetSchedulerUser from '@hooks/useSetSchedulerUser';
 import useSecureRoute from '@hooks/useSecureRoute';
 import useDebouncedSearchValue from '@hooks/useDebouncedSearchValue';
+import useGetMeetings from '@hooks/useGetMeetings';
 
 //TODO: clean this component just like the /organizations/page.tsx
 //TODO: instead of redirecting to meeting-type, display the meeting list here
 //TODO: When the component mounts, check if the current organization has changed. If so, update the meetings displayed (and set a loading)
+//TODO: Create a Skeleton for the meetings list. Also display it when changing the current organization
+//TODO: give a cool animation when changing the filters
 function Dashboard() {
   //Context
-  //const { SchedulerUser, setSchedulerUser } = useAppContext();
+  //const { CurrentMeetings, setCurrentMeetings } = useAppContext();
 
-  //Context
+  //User
   const { loadingSchedulerUser, SchedulerUser } = useSetSchedulerUser();
+
+  //Meetings
+  const { loadingMeetings, CurrentMeetings } = useGetMeetings({
+    organization_email: SchedulerUser?.email ?? '',
+    organization_id: SchedulerUser?.current_organization?.id ?? '',
+  });
 
   //Securing route
   const { loadingAuth } = useSecureRoute();
@@ -43,6 +50,7 @@ function Dashboard() {
   //States
   const [loadingChangeCurrentOrg, setLoadingChangeCurrentOrg] =
     useState<boolean>(false);
+
   const [search, setSearch] = useState<string>('');
   const debouncedSearch = useDebouncedSearchValue(search);
 
@@ -118,7 +126,12 @@ function Dashboard() {
   //   }
   // };
 
-  if (!SchedulerUser || loadingAuth || loadingSchedulerUser) {
+  if (
+    !SchedulerUser ||
+    loadingAuth ||
+    loadingSchedulerUser ||
+    loadingMeetings
+  ) {
     return (
       <div className='flex items-center justify-center container h-[90vh]'>
         <Loader />

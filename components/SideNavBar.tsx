@@ -18,7 +18,7 @@ import {
   Building,
 } from 'lucide-react';
 
-//TODO: When clicking on the create button, redirect to /organizations if no organization is created. Otherwise, redirect to /create-meeting
+//TODO: When clicking on the create button, redirect to /organizations if no organization is created. Otherwise, redirect to /create-meeting. Also, check if the amount of meetings is greater than 20, so that it displays a message saying that the user needs to delete some.
 function SideNavBar() {
   const menu = [
     {

@@ -23,6 +23,7 @@ type Props = {
   setOpen?: (open: boolean) => void;
 };
 
+//TODO: better style the scroll bar
 function GenericModal({
   triggerElement,
   size = 'big',

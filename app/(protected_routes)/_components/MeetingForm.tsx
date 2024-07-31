@@ -31,6 +31,9 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
 //TODO: make this component reusable for both the create-meeting and edit-meeting pages
+//TODO: when mounting the component, access the current meetings list. If there are no meetings, fetch them and check if the amount of meetings is greater than 20, so that it displays a message saying that the user needs to delete some.
+//TODO: When editing, just let user edit the title, duration, location and theme color. The organization should not be editable. -> Update the meetings list if the current org. is the one being edited
+//TODO: When creating a new meeting, update the current meeting list if the meeting belongs to the current organization
 function MeetingForm({
   setFormValue,
   SchedulerUser,
