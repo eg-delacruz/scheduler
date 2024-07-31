@@ -29,8 +29,7 @@ import useGetMeetings from '@hooks/useGetMeetings';
 //TODO: clean this component just like the /organizations/page.tsx
 //TODO: instead of redirecting to meeting-type, display the meeting list here
 //TODO: When the component mounts, check if the current organization has changed. If so, update the meetings displayed (and set a loading)
-//TODO: Create a Skeleton for the meetings list. Also display it when changing the current organization
-//TODO: give a cool animation when changing the filters
+//TODO: If when filters are applied and there are no meetings, display a message saying that there are no meetings matching the current filters
 function Dashboard() {
   //Context
   //const { CurrentMeetings, setCurrentMeetings } = useAppContext();
@@ -154,7 +153,12 @@ function Dashboard() {
         setScheduled={setScheduled}
         setExpiration={setExpiration}
       />
-      <MeetingsList />
+      {/* TODO: only display the meetings list if meetings.length > 0 */}
+      <MeetingsList
+        loadingMeetings={loadingMeetings}
+        loadingChangeCurrentOrg={loadingChangeCurrentOrg}
+        meetings={CurrentMeetings}
+      />
     </div>
   );
 }
