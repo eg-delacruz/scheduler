@@ -152,6 +152,7 @@ function Dashboard() {
         setColors={setColors}
         setScheduled={setScheduled}
         setExpiration={setExpiration}
+        scheduled={scheduled}
       />
       {/* TODO: only display the meetings list if meetings.length > 0 */}
       <MeetingsList

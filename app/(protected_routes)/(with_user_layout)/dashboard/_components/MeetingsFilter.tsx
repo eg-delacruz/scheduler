@@ -36,9 +36,9 @@ type Props = {
   setColors: ((boolean: boolean) => void)[];
   setScheduled: (scheduled: boolean) => void;
   setExpiration: (expiration: 'All' | 'Upcoming' | 'Expired') => void;
+  scheduled: boolean;
 };
 
-//TODO: only show the Upcoming and Expired tabs when the Scheduled tab is selected
 function MeetingsFilter({
   loading,
   setLoading,
@@ -47,6 +47,7 @@ function MeetingsFilter({
   setColors,
   setScheduled,
   setExpiration,
+  scheduled,
 }: Props) {
   //Context
   const { SchedulerUser, setSchedulerUser } = useAppContext();
@@ -167,33 +168,35 @@ function MeetingsFilter({
 
       <hr />
 
-      <div className='my-2'>
-        <Tabs defaultValue='Upcoming'>
-          <TabsList>
-            <TabsTrigger
-              disabled={loading}
-              onClick={() => setExpiration('All')}
-              value='All'
-            >
-              All
-            </TabsTrigger>
-            <TabsTrigger
-              disabled={loading}
-              onClick={() => setExpiration('Upcoming')}
-              value='Upcoming'
-            >
-              Upcoming
-            </TabsTrigger>
-            <TabsTrigger
-              disabled={loading}
-              onClick={() => setExpiration('Expired')}
-              value='Expired'
-            >
-              Expired
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
+      {scheduled && (
+        <div className='my-2'>
+          <Tabs defaultValue='Upcoming'>
+            <TabsList>
+              <TabsTrigger
+                disabled={loading}
+                onClick={() => setExpiration('All')}
+                value='All'
+              >
+                All
+              </TabsTrigger>
+              <TabsTrigger
+                disabled={loading}
+                onClick={() => setExpiration('Upcoming')}
+                value='Upcoming'
+              >
+                Upcoming
+              </TabsTrigger>
+              <TabsTrigger
+                disabled={loading}
+                onClick={() => setExpiration('Expired')}
+                value='Expired'
+              >
+                Expired
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+      )}
     </div>
   );
 }

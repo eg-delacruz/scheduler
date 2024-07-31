@@ -28,7 +28,7 @@ function MeetingList({
   }
 
   return (
-    <div className='mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7'>
+    <div className='mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7'>
       {meetings.length === 0 ? (
         <p>No events created</p>
       ) : (
