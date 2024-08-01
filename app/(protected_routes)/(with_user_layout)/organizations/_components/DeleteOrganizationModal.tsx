@@ -18,7 +18,7 @@ import { Button } from '@shadcnComponents/button';
 import { toast } from 'sonner';
 
 //Firestore
-import { doc, updateDoc, getFirestore, or } from 'firebase/firestore';
+import { doc, updateDoc, getFirestore } from 'firebase/firestore';
 import { app } from '@config/FirebaseConfig';
 
 type Props = {

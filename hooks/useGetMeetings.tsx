@@ -45,7 +45,7 @@ function useGetMeetings({
     querySnapshot.forEach((doc) => {
       meetings.push(doc.data() as Meeting);
     });
-    setCurrentMeetings(meetings);
+    setCurrentMeetings([...meetings]);
     setLoadingMeetings(false);
   };
   return { loadingMeetings, CurrentMeetings };

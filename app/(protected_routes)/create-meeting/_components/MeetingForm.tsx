@@ -30,10 +30,6 @@ import { LoginLink } from '@kinde-oss/kinde-auth-nextjs';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
-//TODO: make this component reusable for both the create-meeting and edit-meeting pages
-//TODO: when mounting the component, access the current meetings list. If there are no meetings, fetch them and check if the amount of meetings is greater than 20, so that it displays a message saying that the user needs to delete some.
-//TODO: When editing, just let user edit the title, duration, location and theme color. The organization should not be editable. -> Update the meetings list if the current org. is the one being edited
-//TODO: When creating a new meeting, update the current meeting list if the meeting belongs to the current organization
 function MeetingForm({
   setFormValue,
   SchedulerUser,
@@ -48,9 +44,12 @@ function MeetingForm({
   const [selectedOrganization, setSelectedOrganization] = useState<{
     organization_id: string;
     organization_name: string;
+    attached_meetings: number;
   }>({
     organization_id: SchedulerUser?.current_organization?.id ?? '',
     organization_name: SchedulerUser?.current_organization?.name ?? '',
+    attached_meetings:
+      SchedulerUser?.current_organization?.attached_meetings ?? 0,
   });
   const [duration, setDuration] = useState<number>(30);
   const [locationType, setLocationType] = useState<string>('');
@@ -61,6 +60,8 @@ function MeetingForm({
   const [validUrl, setValidUrl] = useState<string>('');
   const [validPhone, setValidPhone] = useState<string>('');
   const [creating, setCreating] = useState<boolean>(false);
+
+  const meetings_limit = 20;
 
   const db = getFirestore(app);
 
@@ -112,8 +113,14 @@ function MeetingForm({
       return;
     }
 
+    //Eliminate strange characters and spaces to create a unique id for the meeting
+    const simplifiedOrganizationName = selectedOrganization.organization_name
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .toLowerCase();
+    const meeting_id = `${simplifiedOrganizationName}-${Date.now()}`;
+
     const meeting: Meeting = {
-      id: Date.now().toString(),
+      id: meeting_id,
       organization_id: selectedOrganization.organization_id,
       created_by: SchedulerUser?.email ?? '',
       created_at: new Date(),
@@ -156,30 +163,44 @@ function MeetingForm({
     //   router.replace('/dashboard/meeting-type');
     // });
     await setDoc(doc(db, 'Meeting', meeting.id), meeting).then(async () => {
-      //If the current organization is different from the selected organization, we update the current organization
-      if (
-        SchedulerUser.current_organization?.id !==
-          selectedOrganization.organization_id &&
-        SchedulerUser?.email
-      ) {
-        //Get the new current organization
-        const newCurrentOrganization = SchedulerUser.organizations.find(
-          (organization) =>
-            organization.id === selectedOrganization.organization_id
-        );
+      let currentOrganization: Organization | null =
+        SchedulerUser.current_organization;
 
-        if (newCurrentOrganization) {
-          const docRef = doc(db, 'SchedulerUser', SchedulerUser?.email);
-          await updateDoc(docRef, {
-            current_organization: newCurrentOrganization,
-          }).then(() => {
-            setSchedulerUser({
-              ...SchedulerUser,
-              current_organization: newCurrentOrganization,
-            });
-            //TODO: Refetch the meetings list here, since the current org changed and will always need to refetch them
-          });
+      //Add one to the attached meetings of the organization
+      const updatedOrganizations = SchedulerUser.organizations.map(
+        (organization) => {
+          if (organization.id === selectedOrganization.organization_id) {
+            return {
+              ...organization,
+              attached_meetings: organization.attached_meetings + 1,
+            };
+          }
+          return organization;
         }
+      );
+
+      //Update the current organization in any case (to completely change the current organization if the user is creating a meeting for another organization and to update the attached meetings)
+      const updatedCurrentOrganization = updatedOrganizations.find(
+        (organization) =>
+          organization.id === selectedOrganization.organization_id
+      );
+
+      if (updatedCurrentOrganization) {
+        currentOrganization = updatedCurrentOrganization;
+      }
+
+      if (SchedulerUser?.email) {
+        const docRef = doc(db, 'SchedulerUser', SchedulerUser?.email);
+        await updateDoc(docRef, {
+          organizations: updatedOrganizations,
+          current_organization: currentOrganization,
+        }).then(() => {
+          setSchedulerUser({
+            ...SchedulerUser,
+            organizations: updatedOrganizations,
+            current_organization: currentOrganization,
+          });
+        });
       }
       setCreating(false);
       toast(`Meeting for ${selectedOrganization.organization_name} created`);
@@ -225,6 +246,7 @@ function MeetingForm({
                     setSelectedOrganization({
                       organization_id: organization.id,
                       organization_name: organization.name,
+                      attached_meetings: organization.attached_meetings,
                     })
                   }
                 >
@@ -337,7 +359,8 @@ function MeetingForm({
           !locationType ||
           !locationUrl ||
           creating ||
-          !selectedOrganization.organization_name
+          !selectedOrganization.organization_name ||
+          selectedOrganization?.attached_meetings >= meetings_limit
         }
         className='w-full mt-9'
         onClick={handleSubmit}
@@ -352,6 +375,17 @@ function MeetingForm({
             Sign in
           </LoginLink>{' '}
           before creating a new event
+        </p>
+      )}
+
+      {selectedOrganization?.attached_meetings >= meetings_limit && (
+        <p className='text-red-500 mt-2 bg-red-50 p-1 rounded-sm'>
+          You have reached the maximum number of meetings for the organization "
+          {selectedOrganization.organization_name}". Please{' '}
+          <Link className='underline text-blue-400' href={'/dashboard'}>
+            delete some meetings
+          </Link>{' '}
+          or create a new organization.
         </p>
       )}
     </div>

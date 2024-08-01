@@ -37,6 +37,7 @@ type Props = {
   setScheduled: (scheduled: boolean) => void;
   setExpiration: (expiration: 'All' | 'Upcoming' | 'Expired') => void;
   scheduled: boolean;
+  currentent_organization_attached_meetings: number;
 };
 
 function MeetingsFilter({
@@ -48,6 +49,7 @@ function MeetingsFilter({
   setScheduled,
   setExpiration,
   scheduled,
+  currentent_organization_attached_meetings,
 }: Props) {
   //Context
   const { SchedulerUser, setSchedulerUser } = useAppContext();
@@ -59,7 +61,6 @@ function MeetingsFilter({
     (organization) => organization.id !== SchedulerUser.current_organization?.id
   );
 
-  //TODO: refetch the meetings here when current organization changes
   //TODO: set all colors to true and all states to its default value when current organization changes (at the very end of the function)
   const handleCurrentOrganization = async (organization: Organization) => {
     setLoading(true);
@@ -100,7 +101,13 @@ function MeetingsFilter({
 
   return (
     <div className='flex flex-col gap-2'>
-      <h2 className='font-bold text-3xl'>Meetings</h2>
+      <h2 className='font-bold text-3xl flex justify-start items-center gap-2'>
+        <div>Meetings - </div>
+        <div className='flex items-center justify-center w-10 h-10 rounded-full bg-gray-200'>
+          {currentent_organization_attached_meetings &&
+            currentent_organization_attached_meetings}
+        </div>
+      </h2>
 
       <div className='flex justify-between gap-1'>
         <Input

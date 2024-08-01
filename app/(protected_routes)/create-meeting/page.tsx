@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 
 //Components
-import MeetingForm from '../_components/MeetingForm';
-import PreviewMeeting from '../_components/PreviewMeeting';
+import MeetingForm from './_components/MeetingForm';
+import PreviewMeeting from './_components/PreviewMeeting';
 import Loader from '@components/Loader';
 
 //Hooks
@@ -14,6 +14,7 @@ import useSetSchedulerUser from '@hooks/useSetSchedulerUser';
 //Context
 import { useAppContext } from '@context/index';
 
+//TODO: Redirect if no organization is created
 function CreateMeeting() {
   //States
   const [formValue, setFormValue] = useState<
@@ -45,7 +46,11 @@ function CreateMeeting() {
     );
   }
 
-  if (SchedulerUser) {
+  if (
+    SchedulerUser &&
+    SchedulerUser.current_organization &&
+    SchedulerUser.organizations.length > 0
+  ) {
     return (
       <div className='grid grid-cols-1 md:grid-cols-3'>
         {/* Meeting form */}

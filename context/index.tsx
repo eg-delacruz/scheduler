@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useState } from 'react';
 
-//TODO: when creating the fetching meetings function, set the needed arguments to fetch the proper meetings
 type Context = {
   SchedulerUser: SchedulerUser | null;
   setSchedulerUser: React.Dispatch<React.SetStateAction<SchedulerUser | null>>;

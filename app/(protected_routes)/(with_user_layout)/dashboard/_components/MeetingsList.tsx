@@ -2,31 +2,40 @@
 import { Skeleton } from '@shadcnComponents/skeleton';
 
 //Icons
-import { Eye, Clock, Copy, MapPin, Trash } from 'lucide-react';
+import { Eye, Clock, Copy, MapPin } from 'lucide-react';
+
+//Components
+import DeleteMeetingModal from './DeleteMeetingModal';
 
 type Props = {
   loadingMeetings: boolean;
   loadingChangeCurrentOrg: boolean;
   meetings: Meeting[];
+  current_organization_id: string;
 };
 
-//TODO: Create a Skeleton for the meetings list. Also display it when changing the current organization
-//TODO: give a cool animation when changing the filters
-//TODO: display a message when there are no meetings
+//TODO: Copy public Link
+//TODO: Edit event --> Also allow to change the color of the meeting
+//TODO: Add a button that allows to add the meeting to google calendar. It should display a modal and only when the meeting is scheduled
+
 function MeetingList({
   meetings,
   loadingMeetings,
   loadingChangeCurrentOrg,
+  current_organization_id,
 }: Props) {
   const onCopyClickHandler = (meeting: Meeting) => {
     console.log(meeting);
   };
 
-  const handleDelete = (meeting: Meeting) => {
-    console.log(meeting);
-  };
+  const meetings_organization_id = meetings[0]?.organization_id;
 
-  if (loadingMeetings || loadingChangeCurrentOrg) {
+  if (
+    loadingMeetings ||
+    loadingChangeCurrentOrg ||
+    (meetings_organization_id !== current_organization_id &&
+      meetings_organization_id !== undefined)
+  ) {
     return (
       <div className='mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7'>
         <Skeleton className='h-52 w-full rounded-lg' />
@@ -39,7 +48,7 @@ function MeetingList({
     );
   }
 
-  if (meetings.length === 0) {
+  if (meetings.length === 0 && meetings_organization_id === undefined) {
     return (
       <div className='pt-10'>
         <div className='border-2 rounded max-w-xl mx-auto bg-slate-50 text-center p-2'>
@@ -90,10 +99,7 @@ function MeetingList({
               <Copy className='h-4 w-4' /> Copy public Link
             </p>
 
-            <Trash
-              onClick={() => handleDelete(meeting)}
-              className='cursor-pointer p-1 w-7 h-7 rounded-sm hover:bg-red-400 hover:text-white'
-            />
+            <DeleteMeetingModal meeting={meeting} />
           </div>
         </div>
       ))}

@@ -45,6 +45,7 @@ interface Organization {
   days_available: { [key: string]: boolean };
   end_time: string;
   start_time: string;
+  attached_meetings: number;
 }
 
 interface Meeting {

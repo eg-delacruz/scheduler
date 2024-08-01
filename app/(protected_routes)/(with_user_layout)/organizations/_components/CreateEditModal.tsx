@@ -133,6 +133,7 @@ function CreateEditModal({ action, triggerElement, organization_id }: Props) {
         days_available: daysAvailable,
         end_time: endTime,
         start_time: startTime,
+        attached_meetings: 0,
       };
 
       if (SchedulerUser?.email) {
