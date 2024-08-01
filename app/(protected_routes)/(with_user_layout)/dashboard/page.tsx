@@ -30,6 +30,7 @@ import useGetMeetings from '@hooks/useGetMeetings';
 //TODO: instead of redirecting to meeting-type, display the meeting list here
 //TODO: When the component mounts, check if the current organization has changed. If so, update the meetings displayed (and set a loading)
 //TODO: If when filters are applied and there are no meetings, display a message saying that there are no meetings matching the current filters
+//TODO: give a cool animation to the meeting list when changing the filters
 function Dashboard() {
   //Context
   //const { CurrentMeetings, setCurrentMeetings } = useAppContext();
