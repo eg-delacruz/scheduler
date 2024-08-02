@@ -23,7 +23,6 @@ type Props = {
   setOpen?: (open: boolean) => void;
 };
 
-//TODO: better style the scroll bar
 function GenericModal({
   triggerElement,
   size = 'big',
@@ -43,6 +42,9 @@ function GenericModal({
           maxWidth: size == 'big' ? '800px' : '400px',
           maxHeight: '600px',
           overflowY: 'auto',
+          //Style the scroll bar
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'blue',
         }}
       >
         <DialogHeader>

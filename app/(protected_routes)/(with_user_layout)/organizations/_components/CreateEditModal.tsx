@@ -210,13 +210,18 @@ function CreateEditModal({ action, triggerElement, organization_id }: Props) {
           await updateDoc(docRef, {
             organizations: updatedOrganizations,
             current_organization: updadetUser.current_organization,
-          }).then(() => {
-            setSchedulerUser({
-              ...updadetUser,
+          })
+            .then(() => {
+              setSchedulerUser({
+                ...updadetUser,
+              });
+              console.log('Organization updated');
+              toast('Organization updated');
+            })
+            .catch((error) => {
+              console.error('Error updating organization: ', error);
+              toast('Error updating organization');
             });
-            console.log('Organization updated');
-            toast('Organization updated');
-          });
         }
       }
     }

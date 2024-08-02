@@ -2,10 +2,11 @@
 import { Skeleton } from '@shadcnComponents/skeleton';
 
 //Icons
-import { Eye, Clock, Copy, MapPin } from 'lucide-react';
+import { Clock, Copy, MapPin, Calendar } from 'lucide-react';
 
 //Components
 import DeleteMeetingModal from './DeleteMeetingModal';
+import MeetingDetailsModal from './MeetingDetailsModal';
 
 type Props = {
   loadingMeetings: boolean;
@@ -68,7 +69,8 @@ function MeetingList({
         >
           <div className='flex justify-between gap-2'>
             <h4>{meeting.meeting_title}</h4>
-            <Eye className='p-1 cursor-pointer w-8 h-8 rounded-sm hover:bg-gray-100' />
+
+            <MeetingDetailsModal meeting={meeting} />
           </div>
 
           <p className='font-bold'>
@@ -99,7 +101,10 @@ function MeetingList({
               <Copy className='h-4 w-4' /> Copy public Link
             </p>
 
-            <DeleteMeetingModal meeting={meeting} />
+            <div className='flex gap-1'>
+              <Calendar className='cursor-pointer p-1 w-7 h-7 rounded-sm hover:bg-blue-500 hover:text-white' />
+              <DeleteMeetingModal meeting={meeting} />
+            </div>
           </div>
         </div>
       ))}

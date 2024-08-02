@@ -8,7 +8,6 @@ import { Clock, MapPin } from 'lucide-react';
 import { Calendar } from '@shadcnComponents/calendar';
 import { Button } from '@shadcnComponents/button';
 
-//TODO: make this component reusable for editing as well
 function PreviewMeeting({
   formValue,
 }: {
@@ -56,7 +55,7 @@ function PreviewMeeting({
       <h2 className='font-bold text-2xl m-4'>Preview</h2>
       <p className='ml-4'>
         This is how your meeting will look like for the person scheduling a
-        meeting with you. Don't try to change the date and time.
+        meeting with you.
       </p>
       <div
         className='p-5 py-9 shadow-lg m-5 border-t-8'
