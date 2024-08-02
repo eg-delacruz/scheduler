@@ -11,6 +11,7 @@ import DeleteOrganizationModal from './DeleteOrganizationModal';
 function OrganizationsTable() {
   const organizations = useAppContext().SchedulerUser?.organizations;
   const SchedulerUser = useAppContext().SchedulerUser;
+  const organizationsEmail = useAppContext().SchedulerUser?.email;
 
   const AvailableDays = ({
     available_days,
@@ -82,7 +83,10 @@ function OrganizationsTable() {
                   organization_id={organization.id}
                 />
 
-                <DeleteOrganizationModal organization={organization} />
+                <DeleteOrganizationModal
+                  organization={organization}
+                  organization_email={organizationsEmail ?? ''}
+                />
               </div>
             </div>
 

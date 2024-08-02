@@ -18,15 +18,24 @@ import { Button } from '@shadcnComponents/button';
 import { toast } from 'sonner';
 
 //Firestore
-import { doc, updateDoc, getFirestore } from 'firebase/firestore';
+import {
+  doc,
+  updateDoc,
+  getFirestore,
+  query,
+  where,
+  collection,
+  getDocs,
+  deleteDoc,
+} from 'firebase/firestore';
 import { app } from '@config/FirebaseConfig';
 
 type Props = {
   organization: Organization;
+  organization_email: string;
 };
 
-//TODO: delete all related meetings when erasing the organization
-function DeleteOrganizationModal({ organization }: Props) {
+function DeleteOrganizationModal({ organization, organization_email }: Props) {
   //States
   const [open, setOpen] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
@@ -59,6 +68,23 @@ function DeleteOrganizationModal({ organization }: Props) {
             updatedUser.current_organization = null;
           }
         }
+
+        //Delete all related meetings
+        const q = query(
+          collection(db, 'Meeting'),
+          where('organization_email', '==', organization_email),
+          where('organization_id', '==', organization.id)
+        );
+
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(async (document) => {
+          const meeting: Meeting = document.data() as Meeting;
+          await deleteDoc(doc(db, 'Meeting', meeting.id));
+        });
+
+        console.log('Meetings deleted');
+
+        //Delete the organization
         const docRef = doc(db, 'SchedulerUser', SchedulerUser?.email);
 
         await updateDoc(docRef, {

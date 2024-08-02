@@ -35,7 +35,7 @@ function CreateMeeting() {
   //User
   const { SchedulerUser, loadingSchedulerUser } = useSetSchedulerUser();
 
-  //Redirect if no organization is created
+  //Redirect if no organization has been created
   const router = useRouter();
 
   useEffect(() => {
