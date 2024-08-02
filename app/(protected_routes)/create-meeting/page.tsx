@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 //Components
 import MeetingForm from './_components/MeetingForm';
@@ -14,7 +15,6 @@ import useSetSchedulerUser from '@hooks/useSetSchedulerUser';
 //Context
 import { useAppContext } from '@context/index';
 
-//TODO: Redirect if no organization is created
 function CreateMeeting() {
   //States
   const [formValue, setFormValue] = useState<
@@ -34,6 +34,19 @@ function CreateMeeting() {
 
   //User
   const { SchedulerUser, loadingSchedulerUser } = useSetSchedulerUser();
+
+  //Redirect if no organization is created
+  const router = useRouter();
+
+  useEffect(() => {
+    if (
+      SchedulerUser &&
+      SchedulerUser.organizations.length === 0 &&
+      !loadingSchedulerUser
+    ) {
+      router.replace('/organizations');
+    }
+  }, [SchedulerUser]);
 
   //Context
   const { setSchedulerUser } = useAppContext();
