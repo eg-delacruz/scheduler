@@ -9,6 +9,7 @@ export default async function createSchedulerUser(
 
   const created_user: SchedulerUser = {
     name: user.given_name + ' ' + user.family_name,
+    id: user.id,
     email: user.email,
     created_at: new Date(),
     organizations: [],

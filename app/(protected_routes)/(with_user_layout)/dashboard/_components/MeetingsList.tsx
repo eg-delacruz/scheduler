@@ -16,7 +16,6 @@ type Props = {
 };
 
 //TODO: Copy public Link
-//TODO: Edit event --> Also allow to change the color of the meeting
 //TODO: Add a button that allows to add the meeting to google calendar. It should display a modal and only when the meeting is scheduled
 
 function MeetingList({
@@ -102,7 +101,9 @@ function MeetingList({
             </p>
 
             <div className='flex gap-1'>
-              <Calendar className='cursor-pointer p-1 w-7 h-7 rounded-sm hover:bg-blue-500 hover:text-white' />
+              {meeting.status === 'scheduled' && (
+                <Calendar className='cursor-pointer p-1 w-7 h-7 rounded-sm hover:bg-blue-500 hover:text-white' />
+              )}
               <DeleteMeetingModal meeting={meeting} />
             </div>
           </div>

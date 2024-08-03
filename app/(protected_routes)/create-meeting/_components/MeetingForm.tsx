@@ -122,6 +122,7 @@ function MeetingForm({
     const meeting: Meeting = {
       id: meeting_id,
       organization_id: selectedOrganization.organization_id,
+      scheduler_user_id: SchedulerUser?.id ?? '',
       created_by: SchedulerUser?.email ?? '',
       created_at: new Date(),
       modified_at: new Date(),

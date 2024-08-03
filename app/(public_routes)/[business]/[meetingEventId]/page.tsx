@@ -26,6 +26,7 @@ type Props = {
 
 //TODO: create loading state
 //TODO: display errors if there is no businessInfo or eventInfo available -> send to 404
+//TODO: Erase this component and all the /business /meetingEventId route
 function ShareMeetingEvent({ params }: Props) {
   //States
   const [businessInfo, setBusinessInfo] = useState<BusinessInfo>();

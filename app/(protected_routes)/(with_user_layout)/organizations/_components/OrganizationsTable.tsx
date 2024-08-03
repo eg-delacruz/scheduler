@@ -8,6 +8,7 @@ import { Clock, Pen } from 'lucide-react';
 import ManageOrganizationModal from './ManageOrganizationModal';
 import DeleteOrganizationModal from './DeleteOrganizationModal';
 
+//TODO: display the meetings of the organizations in their cards
 function OrganizationsTable() {
   const organizations = useAppContext().SchedulerUser?.organizations;
   const SchedulerUser = useAppContext().SchedulerUser;

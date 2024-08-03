@@ -28,6 +28,7 @@ interface KindeUser {
 
 interface SchedulerUser {
   name: string | null;
+  id: string;
   email: string | null;
   created_at: Date;
   organizations: Organization[];
@@ -51,6 +52,7 @@ interface Organization {
 interface Meeting {
   id: string;
   organization_id: string;
+  scheduler_user_id: string;
   created_by: string;
   created_at: Date;
   modified_at: Date;
