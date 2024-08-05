@@ -15,7 +15,8 @@ type Props = {
   current_organization_id: string;
 };
 
-//TODO: Copy public Link
+import { toast } from 'sonner';
+
 //TODO: Add a button that allows to add the meeting to google calendar. It should display a modal and only when the meeting is scheduled
 
 function MeetingList({
@@ -25,7 +26,10 @@ function MeetingList({
   current_organization_id,
 }: Props) {
   const onCopyClickHandler = (meeting: Meeting) => {
-    console.log(meeting);
+    const meetingEventLink =
+      process.env.NEXT_PUBLIC_BASE_URL + 'meeting/' + meeting.id;
+    navigator.clipboard.writeText(meetingEventLink);
+    toast('Url copied!');
   };
 
   const meetings_organization_id = meetings[0]?.organization_id;

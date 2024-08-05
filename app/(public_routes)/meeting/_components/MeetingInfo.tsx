@@ -4,6 +4,9 @@ import { CalendarCheck, Clock, MapPin, Timer } from 'lucide-react';
 //Date format library instelled along with shadcn ui
 import { format } from 'date-fns/format';
 
+//Schadcn UI components
+import { toast } from 'sonner';
+
 type Props = {
   meeting: Meeting;
   selectedTime: string;
@@ -34,13 +37,15 @@ function MeetingInfo({ meeting, selectedTime, date }: Props) {
             <Timer /> {selectedTime}
           </p>
         )}
-        <a
-          target='_blank'
-          className='text-primary text-ellipsis block whitespace-nowrap overflow-hidden'
-          href={meeting.location_url_phone ?? ''}
+        <p
+          className='text-primary text-ellipsis block whitespace-nowrap overflow-hidden cursor-pointer w-fit'
+          onClick={() => {
+            navigator.clipboard.writeText(meeting.location_url_phone);
+            toast('Link copied to clipboard');
+          }}
         >
           {meeting.location_url_phone}
-        </a>
+        </p>
       </div>
     </div>
   );

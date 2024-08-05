@@ -8,8 +8,13 @@ import { Clock, MapPin } from 'lucide-react';
 import { Calendar } from '@shadcnComponents/calendar';
 import { Button } from '@shadcnComponents/button';
 
+//Utils
+import createTimeSlots from '@utils/createTimeSlots';
+
 function PreviewMeeting({
   formValue,
+  organization_start_time,
+  organization_end_time,
 }: {
   formValue:
     | {
@@ -21,34 +26,21 @@ function PreviewMeeting({
         themeColor: string;
       }
     | undefined;
+  organization_start_time: string;
+  organization_end_time: string;
 }) {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [timeSlots, setTimeSlots] = useState<string[]>();
 
   useEffect(() => {
-    formValue?.duration && createTimeSlot(formValue?.duration);
+    formValue?.duration &&
+      createTimeSlots({
+        interval: formValue.duration,
+        setTimeSlots,
+        start_time: organization_start_time,
+        end_time: organization_end_time,
+      });
   }, [formValue]);
-
-  const createTimeSlot = (interval: number) => {
-    const startTime = 8 * 60; //8 AM in minutes
-    const endTime = 22 * 60; //10 PM in minutes
-    const totalSlots = (endTime - startTime) / interval;
-
-    //We can set a fixed array length. Since we are not iterating anything from the beginning to create the new array, the first value of the callback is undefined, therefore we won't use it and in this case we will just access the index
-    const slots = Array.from({ length: totalSlots }, (_, index) => {
-      const totalMinutes = startTime + index * interval;
-      const hours = Math.floor(totalMinutes / 60);
-      const minutes = totalMinutes % 60;
-      const formattedHours = hours > 12 ? hours - 12 : hours; //Convert to 12-hour format
-      const period = hours >= 12 ? 'PM' : 'AM';
-      //padStart is a method that adds a character to the beginning of a string until it reaches the desired length
-      return `${String(formattedHours).padStart(2, '0')}:${String(
-        minutes
-      ).padStart(2, '0')} ${period}`;
-    });
-
-    setTimeSlots(slots);
-  };
 
   return (
     <>

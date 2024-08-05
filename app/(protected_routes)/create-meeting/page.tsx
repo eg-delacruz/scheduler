@@ -16,6 +16,12 @@ import useSetSchedulerUser from '@hooks/useSetSchedulerUser';
 import { useAppContext } from '@context/index';
 
 function CreateMeeting() {
+  //Securing route
+  const { loadingAuth } = useSecureRoute();
+
+  //User
+  const { SchedulerUser, loadingSchedulerUser } = useSetSchedulerUser();
+
   //States
   const [formValue, setFormValue] = useState<
     | {
@@ -29,15 +35,23 @@ function CreateMeeting() {
     | undefined
   >();
 
-  //Securing route
-  const { loadingAuth } = useSecureRoute();
-
-  //User
-  const { SchedulerUser, loadingSchedulerUser } = useSetSchedulerUser();
+  const [selectedOrgnization, setSelectedOrganization] = useState<{
+    organization_id: string;
+    organization_name: string;
+    attached_meetings: number;
+    start_time: string;
+    end_time: string;
+  }>({
+    organization_id: SchedulerUser?.current_organization?.id ?? '',
+    organization_name: SchedulerUser?.current_organization?.name ?? '',
+    attached_meetings:
+      SchedulerUser?.current_organization?.attached_meetings ?? 0,
+    start_time: SchedulerUser?.current_organization?.start_time ?? '',
+    end_time: SchedulerUser?.current_organization?.end_time ?? '',
+  });
 
   //Redirect if no organization has been created
   const router = useRouter();
-
   useEffect(() => {
     if (
       SchedulerUser &&
@@ -45,6 +59,20 @@ function CreateMeeting() {
       !loadingSchedulerUser
     ) {
       router.replace('/organizations');
+    }
+  }, [SchedulerUser]);
+
+  //Set initial values for the selected organization (from the current organization)
+  useEffect(() => {
+    if (SchedulerUser) {
+      setSelectedOrganization({
+        organization_id: SchedulerUser?.current_organization?.id ?? '',
+        organization_name: SchedulerUser?.current_organization?.name ?? '',
+        attached_meetings:
+          SchedulerUser?.current_organization?.attached_meetings ?? 0,
+        start_time: SchedulerUser?.current_organization?.start_time ?? '',
+        end_time: SchedulerUser?.current_organization?.end_time ?? '',
+      });
     }
   }, [SchedulerUser]);
 
@@ -72,12 +100,18 @@ function CreateMeeting() {
             setFormValue={setFormValue}
             SchedulerUser={SchedulerUser}
             setSchedulerUser={setSchedulerUser}
+            selectedOrganization={selectedOrgnization}
+            setSelectedOrganization={setSelectedOrganization}
           />
         </div>
 
         {/* Preview */}
         <div className='md:col-span-2'>
-          <PreviewMeeting formValue={formValue} />
+          <PreviewMeeting
+            formValue={formValue}
+            organization_start_time={selectedOrgnization.start_time}
+            organization_end_time={selectedOrgnization.end_time}
+          />
         </div>
       </div>
     );

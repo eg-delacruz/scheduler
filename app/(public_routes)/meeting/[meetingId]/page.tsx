@@ -86,7 +86,12 @@ function ShareMeetingEvent({ params }: Props) {
 
   if (meeting && organization)
     return (
-      <MeetingTimeDateSelection meeting={meeting} organization={organization} />
+      <MeetingTimeDateSelection
+        meeting={meeting}
+        days_available={organization.days_available}
+        end_time={organization.end_time}
+        start_time={organization.start_time}
+      />
     );
 }
 

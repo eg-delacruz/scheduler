@@ -231,13 +231,13 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
           <TimeDateSelection
             date={date}
             enableTimeSlot={enableTimeSlot}
-            handleDateChange={handleDateChange}
+            setEnableTimeSlot={setEnableTimeSlot}
+            selectedTime={selectedTime}
             setSelectedTime={setSelectedTime}
             timeSlots={timeSlots}
-            selectedTime={selectedTime}
-            prevBookedSlots={prevBookedSlots}
-            setEnableTimeSlot={setEnableTimeSlot}
             daysAvailable={businessInfo?.daysAvailable}
+            handleDateChange={handleDateChange}
+            prevBookedSlots={prevBookedSlots}
           />
         ) : (
           <UserFormInfo
@@ -249,7 +249,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
         )}
       </div>
 
-      {/* Buttons */}
+      {/* Buttons --> Copied to the new app structure*/}
       <div className='flex gap-3 justify-end'>
         {step === 2 && (
           <Button variant='outline' onClick={() => setStep(1)}>

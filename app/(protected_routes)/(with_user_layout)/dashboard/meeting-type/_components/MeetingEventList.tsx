@@ -34,7 +34,6 @@ import { Skeleton } from '@shadcnComponents/skeleton';
 
 import { toast } from 'sonner';
 
-//TODO: Make it possible to edit the events
 function MeetingEventList() {
   //States
   //State used to avoid infinite fetchings on component mount

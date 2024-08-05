@@ -29,28 +29,28 @@ import { LoginLink } from '@kinde-oss/kinde-auth-nextjs';
 
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { start } from 'repl';
 
 function MeetingForm({
   setFormValue,
   SchedulerUser,
   setSchedulerUser,
+  selectedOrganization,
+  setSelectedOrganization,
 }: {
   setFormValue: Function;
   SchedulerUser: SchedulerUser;
   setSchedulerUser: Function;
-}) {
-  //Input states
-  const [eventName, setEventName] = useState<string>('');
-  const [selectedOrganization, setSelectedOrganization] = useState<{
+  selectedOrganization: {
     organization_id: string;
     organization_name: string;
     attached_meetings: number;
-  }>({
-    organization_id: SchedulerUser?.current_organization?.id ?? '',
-    organization_name: SchedulerUser?.current_organization?.name ?? '',
-    attached_meetings:
-      SchedulerUser?.current_organization?.attached_meetings ?? 0,
-  });
+  };
+  setSelectedOrganization: Function;
+}) {
+  //Input states
+  const [eventName, setEventName] = useState<string>('');
+
   const [duration, setDuration] = useState<number>(30);
   const [locationType, setLocationType] = useState<string>('');
   const [locationUrl, setLocationUrl] = useState<string>('');
@@ -144,25 +144,6 @@ function MeetingForm({
       appointee_note: '',
     };
 
-    //We generate an id based on the current timestamp
-    // const id = Date.now().toString();
-    // await setDoc(doc(db, 'MeetingEvent', id), {
-    //   id,
-    //   eventName,
-    //   duration,
-    //   locationType,
-    //   locationUrl,
-    //   themeColor,
-    //   createdBy: user?.email,
-    //   //We reference this event to the corresponding business
-    //   businessId: doc(db, 'Business', user?.email),
-    // }).then(() => {
-    //   setCreating(false);
-    //   //TODO: "New Meeting for the organization org_name created" toast
-    //   toast('New Meeting Event Created');
-    //   //TODO: redirect to dashboard
-    //   router.replace('/dashboard/meeting-type');
-    // });
     await setDoc(doc(db, 'Meeting', meeting.id), meeting).then(async () => {
       let currentOrganization: Organization | null =
         SchedulerUser.current_organization;
@@ -248,6 +229,8 @@ function MeetingForm({
                       organization_id: organization.id,
                       organization_name: organization.name,
                       attached_meetings: organization.attached_meetings,
+                      start_time: organization.start_time,
+                      end_time: organization.end_time,
                     })
                   }
                 >

@@ -53,6 +53,7 @@ function TimeDateSelection({
   const checkTimeSlot = (time: string): boolean => {
     return prevBookedSlots.filter((item: string) => item == time).length > 0;
   };
+
   return (
     <div className='md:col-span-2 flex px-4'>
       <div className='flex flex-col'>
