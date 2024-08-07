@@ -34,7 +34,6 @@ type Props = {
   organization_id?: string;
 };
 
-//TODO: do not let user to choose a end time that is previous to the start time
 function CreateEditModal({ action, triggerElement, organization_id }: Props) {
   //Context
   const { SchedulerUser, setSchedulerUser } = useAppContext();
@@ -68,6 +67,9 @@ function CreateEditModal({ action, triggerElement, organization_id }: Props) {
           Sunday: false,
         }
   );
+  const [availableAtCurrentDay, setAvailableAtCurrentDay] = useState<boolean>(
+    toEditOrg ? toEditOrg.available_at_current_day : false
+  );
   const [startTime, setStartTime] = useState<string>(
     toEditOrg ? toEditOrg.start_time : '09:00'
   );
@@ -100,6 +102,12 @@ function CreateEditModal({ action, triggerElement, organization_id }: Props) {
 
   const db = getFirestore(app);
 
+  const timeToMinutes = (time: string) => {
+    let [hours, minutes] = time.split(':');
+    if (hours === '00') hours = '24';
+    return parseInt(hours) * 60 + parseInt(minutes);
+  };
+
   const handleSubmit = async () => {
     setSubmitting(true);
     setFormError('');
@@ -122,6 +130,15 @@ function CreateEditModal({ action, triggerElement, organization_id }: Props) {
       return;
     }
 
+    //Do not let user to choose a end time that is previous to the start time
+    const startMinutes = timeToMinutes(startTime);
+    const endMinutes = timeToMinutes(endTime);
+    if (endMinutes <= startMinutes) {
+      setFormError('End time must be greater than start time');
+      setSubmitting(false);
+      return;
+    }
+
     if (action === 'create') {
       const organization: Organization = {
         id: Date.now().toString(),
@@ -132,6 +149,7 @@ function CreateEditModal({ action, triggerElement, organization_id }: Props) {
         modified_at: new Date(),
         modified_by: SchedulerUser?.email || '',
         days_available: daysAvailable,
+        available_at_current_day: availableAtCurrentDay,
         end_time: endTime,
         start_time: startTime,
         attached_meetings: 0,
@@ -171,6 +189,7 @@ function CreateEditModal({ action, triggerElement, organization_id }: Props) {
           });
           setStartTime('09:00');
           setEndTime('17:00');
+          setAvailableAtCurrentDay(false);
 
           console.log('Organization created!');
           toast('Organization created!');
@@ -186,6 +205,7 @@ function CreateEditModal({ action, triggerElement, organization_id }: Props) {
         modified_at: new Date(),
         modified_by: SchedulerUser?.email || '',
         days_available: daysAvailable,
+        available_at_current_day: availableAtCurrentDay,
         end_time: endTime,
         start_time: startTime,
       };
@@ -313,6 +333,28 @@ function CreateEditModal({ action, triggerElement, organization_id }: Props) {
                 </h2>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Available at current day */}
+        <div>
+          <label className='font-bold mb-2 block'>
+            Available at current day
+          </label>
+          <div className='flex gap-1 justify-start items-center'>
+            <Checkbox
+              checked={availableAtCurrentDay}
+              onCheckedChange={() =>
+                setAvailableAtCurrentDay(!availableAtCurrentDay)
+              }
+              id='availableAtCurrentDay'
+            />
+            <label
+              htmlFor='availableAtCurrentDay'
+              className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+            >
+              Let the appointee book a meeting at the same day of scheduling
+            </label>
           </div>
         </div>
 

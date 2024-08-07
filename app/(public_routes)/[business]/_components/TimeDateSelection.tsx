@@ -19,7 +19,6 @@ type Props = {
   daysAvailable: { [day: string]: string } | undefined;
 };
 
-//TODO: display a loading skeleton based on initialLoad (when false, show skeleton)
 function TimeDateSelection({
   date,
   handleDateChange,

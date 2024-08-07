@@ -15,11 +15,12 @@ type Props = {
   setSelectedTime: (time: string) => void;
   timeSlots: string[] | undefined;
   daysAvailable: { [key: string]: boolean };
+  availableAtCurrentDay: boolean;
   handleDateChange: (selectedDate?: Date) => void;
   prevBookedSlots: { selected_time: string; duration: number }[];
+  selectedDateIsToday: boolean | undefined;
 };
 
-//TODO: display a loading skeleton based on initialLoad (when false, show skeleton)
 function TimeDateSelection({
   date,
   enableDaySlots,
@@ -28,21 +29,21 @@ function TimeDateSelection({
   setSelectedTime,
   timeSlots,
   daysAvailable,
+  availableAtCurrentDay,
   handleDateChange,
   prevBookedSlots,
+  selectedDateIsToday,
 }: Props) {
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
-  const selectedDateIsToday: boolean | undefined =
-    date && format(date, 'dd/MM/yyyy') === format(new Date(), 'dd/MM/yyyy');
 
-  //This will check if the date is available when the component mounts (just once)
+  //This will check if the initial date on mount from the calendar is available when the component mounts (just once)
   useEffect(() => {
     if (date && !initialLoad && daysAvailable) {
       //Get the day of the week from the initial data (today's date)
       const day = format(date, 'EEEE');
 
       //This block will execute just for available days
-      if (daysAvailable?.[day]) {
+      if (daysAvailable?.[day] && availableAtCurrentDay) {
         setEnableDaySlots(true);
       } else {
         setEnableDaySlots(false);

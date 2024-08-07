@@ -44,6 +44,7 @@ interface Organization {
   modified_at: Date;
   modified_by: string;
   days_available: { [key: string]: boolean };
+  available_at_current_day: boolean;
   end_time: string;
   start_time: string;
   attached_meetings: number;

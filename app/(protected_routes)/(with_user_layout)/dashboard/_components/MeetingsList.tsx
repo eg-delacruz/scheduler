@@ -18,6 +18,7 @@ type Props = {
 import { toast } from 'sonner';
 
 //TODO: Add a button that allows to add the meeting to google calendar. It should display a modal and only when the meeting is scheduled
+//TODO: when meeting is unshceduled, display that word as a light gray color to decrease its importance
 
 function MeetingList({
   meetings,

@@ -39,7 +39,6 @@ type Props = {
   eventInfo: MeetingEvent | undefined;
   businessInfo: BusinessInfo | undefined;
 };
-//TODO: block the already occupied time slots
 function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
   //Select Date and Time states
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -86,11 +85,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
   };
 
   //Get all occupied time slots to disable them
-  //TODO: check if it is just needed to fetch the Scheduled meeting of a specific Date and eventId, or just of the specific Date, since ther can be other Meetings at the same time...
-  //TODO: fix bug that makes all time slots of all days with same name unavailable. It should just block the ones of the particular day
-  //TODO: a guy in video comments said this: If in a particular day is already booked and is once viewed, I will be shown as booked for all the day
-  //eg: if 18th May 3pm is already booked, this 3pm for all the days is shown as booked which is not the case
-  //how to solve these issues? could you make a separate video for it?
+
   const getPrevEventBooking = async (selectedDate: Date) => {
     const q = query(
       collection(db, 'ScheduledMeetings'),

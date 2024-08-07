@@ -18,6 +18,7 @@ import { app } from '@config/FirebaseConfig';
 //Components
 import Loader from '@components/Loader';
 import MeetingTimeDateSelection from '../_components/MeetingTimeDateSelection';
+import ScheduledMeetingView from '../_components/ScheduledMeetingView';
 
 type Props = {
   params: {
@@ -31,6 +32,8 @@ function ShareMeetingEvent({ params }: Props) {
   const [meeting, setMeeting] = useState<Meeting>();
   const [organization, setOrganization] = useState<Organization>();
   const [loading, setLoading] = useState<boolean>(true);
+  //Pass this state to the 'congratulatios' component to know if display a message of thankyou and that he will receive a confirmation email
+  const [justScheduled, setJustScheduled] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -84,13 +87,20 @@ function ShareMeetingEvent({ params }: Props) {
     );
   }
 
+  if (meeting?.status === 'scheduled') {
+    return <ScheduledMeetingView />;
+  }
+
   if (meeting && organization)
     return (
       <MeetingTimeDateSelection
         meeting={meeting}
+        setMeeting={setMeeting}
         days_available={organization.days_available}
+        available_at_current_day={organization.available_at_current_day}
         end_time={organization.end_time}
         start_time={organization.start_time}
+        setJustScheduled={setJustScheduled}
       />
     );
 }
