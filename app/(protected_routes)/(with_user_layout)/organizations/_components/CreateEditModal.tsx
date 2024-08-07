@@ -34,6 +34,7 @@ type Props = {
   organization_id?: string;
 };
 
+//TODO: do not let user to choose a end time that is previous to the start time
 function CreateEditModal({ action, triggerElement, organization_id }: Props) {
   //Context
   const { SchedulerUser, setSchedulerUser } = useAppContext();

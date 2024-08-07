@@ -9,27 +9,31 @@ import { format } from 'date-fns/format';
 
 type Props = {
   date: Date | undefined;
-  enableTimeSlot: boolean;
-  setEnableTimeSlot: (value: boolean) => void;
+  enableDaySlots: boolean;
+  setEnableDaySlots: (value: boolean) => void;
   selectedTime: string;
   setSelectedTime: (time: string) => void;
   timeSlots: string[] | undefined;
   daysAvailable: { [key: string]: boolean };
   handleDateChange: (selectedDate?: Date) => void;
+  prevBookedSlots: { selected_time: string; duration: number }[];
 };
 
 //TODO: display a loading skeleton based on initialLoad (when false, show skeleton)
 function TimeDateSelection({
   date,
-  enableTimeSlot,
-  setEnableTimeSlot,
+  enableDaySlots,
+  setEnableDaySlots,
   selectedTime,
   setSelectedTime,
   timeSlots,
   daysAvailable,
   handleDateChange,
+  prevBookedSlots,
 }: Props) {
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
+  const selectedDateIsToday: boolean | undefined =
+    date && format(date, 'dd/MM/yyyy') === format(new Date(), 'dd/MM/yyyy');
 
   //This will check if the date is available when the component mounts (just once)
   useEffect(() => {
@@ -39,19 +43,61 @@ function TimeDateSelection({
 
       //This block will execute just for available days
       if (daysAvailable?.[day]) {
-        setEnableTimeSlot(true);
+        setEnableDaySlots(true);
       } else {
-        setEnableTimeSlot(false);
+        setEnableDaySlots(false);
       }
       setInitialLoad(true);
     }
   }, [daysAvailable, initialLoad, date]);
 
-  //This will return a boolean telling if the slot has to be disabled or not
-  //TODO: also disable all timeslots of today that are in the past
-  //const checkTimeSlot = (time: string): boolean => {
-  //return prevBookedSlots.filter((item: string) => item == time).length > 0;
-  //};
+  const transformTimeToMinutes = (time: string): number => {
+    const [hours, minutes_with_period] = time.split(':');
+    const [minutes, period] = minutes_with_period.split(' ');
+
+    let time_in_minutes: number = parseInt(hours) * 60 + parseInt(minutes);
+
+    if (period === 'PM' && hours !== '12') time_in_minutes += 12 * 60;
+
+    if (hours === '12' && period === 'AM')
+      time_in_minutes = 24 * 60 + parseInt(minutes);
+
+    return time_in_minutes;
+  };
+
+  //This will return a boolean telling if the slot has to be disabled or not by checking based on the prevBookedSlots (time and duration) and each slot time
+  const handleDisableBooking = (time: string): boolean => {
+    //If there are no prevBookedSlots and the selected day is not today, we don't have to check anything
+    if (prevBookedSlots.length === 0 && !selectedDateIsToday) {
+      return false;
+    }
+
+    const current_slot_time_in_minutes_start = transformTimeToMinutes(time);
+
+    //If the selected date is today, we have to check if the current time is greater than the current slot time start
+    if (selectedDateIsToday) {
+      const current_time_in_minutes =
+        new Date().getHours() * 60 + new Date().getMinutes();
+
+      if (current_slot_time_in_minutes_start < current_time_in_minutes)
+        return true;
+    }
+
+    //FInd out if the current slot overlaps with any of the prevBookedSlots
+    return prevBookedSlots.some((item) => {
+      const booked_slot_time_in_minutes_start = transformTimeToMinutes(
+        item.selected_time
+      );
+      const booked_slot_time_in_minutes_end =
+        booked_slot_time_in_minutes_start + item.duration;
+
+      return (
+        current_slot_time_in_minutes_start >=
+          booked_slot_time_in_minutes_start &&
+        current_slot_time_in_minutes_start < booked_slot_time_in_minutes_end
+      );
+    });
+  };
 
   return (
     <div className='md:col-span-2 flex px-4'>
@@ -78,7 +124,7 @@ function TimeDateSelection({
         {timeSlots?.map((time: string, index: number) => (
           <Button
             key={index}
-            // disabled={!enableTimeSlot || checkTimeSlot(time)}
+            disabled={!enableDaySlots || handleDisableBooking(time)}
             className={`border-primary text-primary ${
               time === selectedTime && 'bg-primary text-white'
             }`}

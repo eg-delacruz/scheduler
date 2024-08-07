@@ -137,7 +137,6 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
     }
 
     const docId = Date.now().toString();
-    //TODO: review if all this info stored in the scheduled meeting is necessary and eliminate what is not being used
     await setDoc(doc(db, 'ScheduledMeetings', docId), {
       businessName: businessInfo?.businessName,
       businessEmail: businessInfo?.email,

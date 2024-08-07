@@ -16,6 +16,21 @@ import TimeDateSelection from './TimeDateSelection';
 //Utils
 import createTimeSlots from '@utils/createTimeSlots';
 
+//Firestore
+import {
+  getFirestore,
+  setDoc,
+  doc,
+  query,
+  collection,
+  where,
+  getDocs,
+} from 'firebase/firestore';
+import { app } from '@config/FirebaseConfig';
+
+//Date format library instelled along with shadcn ui
+import { format } from 'date-fns/format';
+
 type Props = {
   meeting: Meeting;
   days_available: { [key: string]: boolean };
@@ -31,18 +46,23 @@ function MeetingTimeDateSelection({
   end_time,
   start_time,
 }: Props) {
-  const [timeSlots, setTimeSlots] = useState<string[]>();
   const [date, setDate] = useState<Date>(new Date());
+  const [timeSlots, setTimeSlots] = useState<string[]>();
+  const [enableDaySlots, setEnableDaySlots] = useState<boolean>(false);
   const [selectedTime, setSelectedTime] = useState<string>('');
-  //Used to enable all the slots of the selected day based on the days_available prop and the current selected date
-  //TODO: change name to enableDaySlots
-  const [enableTimeSlot, setEnableTimeSlot] = useState<boolean>(false);
-  const [step, setStep] = useState<number>(1);
+  const [prevBookedSlots, setPrevBookedSlots] = useState<
+    { selected_time: string; duration: number }[]
+  >([]);
 
   //Appointee info states
   const [appointeeName, setAppointeeName] = useState<string>('');
   const [appointeeEmail, setAppointeeEmail] = useState<string>('');
+  const [appointeeNote, setAppointeeNote] = useState<string>('');
+  const [invalidEmailError, setInvalidEmailError] = useState<boolean>(false);
 
+  const [step, setStep] = useState<number>(1);
+
+  //Create the timeslots when component mounts (executes just once, since the meeting object is not changing)
   useEffect(() => {
     meeting.duration &&
       createTimeSlots({
@@ -53,14 +73,52 @@ function MeetingTimeDateSelection({
       });
   }, [meeting]);
 
-  const handleScheduleEvent = async () => {
-    console.log('Schedule event');
+  const db = getFirestore(app);
+
+  //TODO: test this when I already have some scheduled meetings
+  const getPrevEventBooking = async (selectedDate: Date) => {
+    const q = query(
+      collection(db, 'Meeting'),
+      where('date', '==', selectedDate),
+      where('organization_id', '==', meeting.organization_id),
+      where('status', '==', 'scheduled')
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    let currentPrevBookedSlots: { selected_time: string; duration: number }[] =
+      [];
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data() as Meeting;
+      currentPrevBookedSlots.push({
+        selected_time: data.time,
+        duration: data.duration,
+      });
+    });
+
+    setPrevBookedSlots(currentPrevBookedSlots);
   };
 
   const handleDateChange = (selectedDate?: Date) => {
     if (selectedDate) {
       setDate(selectedDate);
+
+      //Get the day of the week from a date
+      const day = format(selectedDate, 'EEEE');
+
+      //This block will execute just for available days
+      if (days_available[day]) {
+        setEnableDaySlots(true);
+        getPrevEventBooking(selectedDate);
+      } else {
+        setEnableDaySlots(false);
+      }
     }
+  };
+
+  const handleScheduleEvent = async () => {
+    console.log('Schedule event');
   };
 
   return (
@@ -82,13 +140,14 @@ function MeetingTimeDateSelection({
         {step === 1 ? (
           <TimeDateSelection
             date={date}
-            enableTimeSlot={enableTimeSlot}
-            setEnableTimeSlot={setEnableTimeSlot}
+            enableDaySlots={enableDaySlots}
+            setEnableDaySlots={setEnableDaySlots}
             selectedTime={selectedTime}
             setSelectedTime={setSelectedTime}
             timeSlots={timeSlots}
             daysAvailable={days_available}
             handleDateChange={handleDateChange}
+            prevBookedSlots={prevBookedSlots}
           />
         ) : (
           <UserFormInfo />
@@ -105,7 +164,7 @@ function MeetingTimeDateSelection({
         {step === 1 ? (
           <Button
             onClick={() => setStep(step + 1)}
-            disabled={!selectedTime || !date || !enableTimeSlot}
+            disabled={!selectedTime || !date || !enableDaySlots}
             className='mt-10 float-right'
           >
             Next

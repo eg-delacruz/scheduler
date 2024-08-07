@@ -13,10 +13,18 @@ export default function createTimeSlots({
   start_time,
   end_time,
 }: Props) {
-  const start_time_hours = parseInt(start_time.split(':')[0]);
+  let start_time_hours = parseInt(start_time.split(':')[0]);
   let start_time_minutes = parseInt(start_time.split(':')[1]);
-  const end_time_hours = parseInt(end_time.split(':')[0]);
+  let end_time_hours = parseInt(end_time.split(':')[0]);
   let end_time_minutes = parseInt(end_time.split(':')[1]);
+
+  if (start_time_hours === 0) {
+    start_time_hours = 24;
+  }
+
+  if (end_time_hours === 0) {
+    end_time_hours = 24;
+  }
 
   if (start_time_minutes % 15 !== 0) {
     start_time_minutes = Math.ceil(start_time_minutes / 15) * 15;
@@ -36,7 +44,7 @@ export default function createTimeSlots({
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
     const formattedHours = hours > 12 ? hours - 12 : hours; //Convert to 12-hour format
-    const period = hours >= 12 ? 'PM' : 'AM';
+    const period = hours >= 12 && hours !== 24 ? 'PM' : 'AM';
     //padStart is a method that adds a character to the beginning of a string until it reaches the desired length
     return `${String(formattedHours).padStart(2, '0')}:${String(
       minutes
