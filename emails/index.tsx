@@ -14,8 +14,6 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 
-//TODO: properly get images from server (like the logo) when the app is in production
-//TODO: properly format everything once the app is in production
 interface Props {
   appointeeName: string;
   duration: number;
@@ -23,6 +21,7 @@ interface Props {
   date: string;
   meetingUrl: string;
   organizationName: string;
+  location_platform: string;
 }
 
 export const Email = ({
@@ -32,6 +31,7 @@ export const Email = ({
   date,
   meetingUrl,
   organizationName,
+  location_platform,
 }: Props) => {
   return (
     <Html>
@@ -39,24 +39,12 @@ export const Email = ({
       <Preview>Yelp recent login</Preview>
       <Body style={main}>
         <Container>
-          <Section style={logo}>
-            <Img
-              src={
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png'
-              }
-              alt='Logo'
-              width={150}
-            />
-          </Section>
-
           <Section style={content}>
             <Row>
               <Img
                 style={image}
                 width={620}
-                src={
-                  'https://yt3.googleusercontent.com/LtM9aKdQGsx4SyoAvnBSOxxoTXlqgUUr9iQJveGRmrzMIdjONEToRJ6mT6ysmKog9AaKast3IGY=w1060-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj'
-                }
+                src={'https://i.imgur.com/t7iGbis.jpeg'}
               />
             </Row>
 
@@ -92,12 +80,14 @@ export const Email = ({
                   {date}
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
-                  <b>Location: </b>
+                  <b>
+                    {location_platform === 'Phone' ? 'Phone:' : 'Location:'}{' '}
+                  </b>
                   {meetingUrl}
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
                   <b>duration: </b>
-                  {duration}
+                  {duration} minutes
                 </Text>
                 <Text
                   style={{
@@ -106,16 +96,19 @@ export const Email = ({
                     marginTop: -5,
                   }}
                 >
-                  *Please Join the meeting on the above details
-                  {meetingUrl}
+                  {location_platform === 'Phone'
+                    ? '* Please join the meeting by calling the phone  number above'
+                    : '*Please Join the meeting by clicking the button below or by using the link above'}
                 </Text>
               </Column>
             </Row>
             <Row style={{ ...boxInfos, paddingTop: '0' }}>
               <Column style={containerButton} colSpan={2}>
-                <Button href={meetingUrl} style={button}>
-                  Join Now
-                </Button>
+                {location_platform !== 'Phone' && (
+                  <Button href={meetingUrl} style={button}>
+                    Join Now
+                  </Button>
+                )}
               </Column>
             </Row>
           </Section>
@@ -124,9 +117,7 @@ export const Email = ({
             <Img
               style={image}
               width={620}
-              src={
-                'https://yt3.googleusercontent.com/LtM9aKdQGsx4SyoAvnBSOxxoTXlqgUUr9iQJveGRmrzMIdjONEToRJ6mT6ysmKog9AaKast3IGY=w1060-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj'
-              }
+              src={'https://i.imgur.com/NVn2duH.jpeg'}
             />
           </Section>
 
@@ -137,8 +128,11 @@ export const Email = ({
               color: 'rgb(0,0,0, 0.7)',
             }}
           >
-            © 2022 | Yelp Inc., 350 Mission Street, San Francisco, CA 94105,
-            U.S.A. | www.yelp.com
+            © {new Date().getFullYear()} | Scheduler is a free app designed and
+            developed by{' '}
+            <a href='https://www.gerardodelacruz.com/en' target='_blank'>
+              Gerardo De La Cruz
+            </a>
           </Text>
         </Container>
       </Body>
@@ -152,7 +146,8 @@ Email.PreviewProps = {
   date: 'Today',
   duration: 30,
   meetingTime: '8 pm',
-  meetingUrl: 'https://www.zoom.com',
+  meetingUrl: '6545313',
+  location_platform: 'Phone',
 } as Props;
 
 export default Email;
@@ -167,10 +162,6 @@ const paragraph = {
   fontSize: 16,
 };
 
-const logo = {
-  padding: '30px 20px',
-};
-
 const containerButton = {
   display: 'flex',
   justifyContent: 'center',
@@ -178,7 +169,7 @@ const containerButton = {
 };
 
 const button = {
-  backgroundColor: '#e00707',
+  backgroundColor: '#266DE1',
   borderRadius: 3,
   color: '#FFF',
   fontWeight: 'bold',
