@@ -43,7 +43,6 @@ type Props = {
   setJustScheduled: (justScheduled: boolean) => void;
 };
 
-//TODO: check the mobile view of the component
 function MeetingTimeDateSelection({
   meeting,
   days_available,
@@ -193,7 +192,7 @@ function MeetingTimeDateSelection({
 
   return (
     <div
-      className='p-5 py-9 shadow-lg m-5 border-t-8 mx-10 md:mx-26 lg:mx-56 my-10'
+      className='p-5 py-9 shadow-lg m-5 border-t-8 mx-10 md:mx-26 lg:mx-44 my-10'
       style={{ borderTopColor: meeting.theme_color }}
     >
       <Image src={'/logo.png'} height={20} width={90} alt='Logo' />

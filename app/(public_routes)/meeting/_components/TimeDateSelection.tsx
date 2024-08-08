@@ -101,14 +101,14 @@ function TimeDateSelection({
   };
 
   return (
-    <div className='md:col-span-2 flex px-4'>
+    <div className='flex flex-col px-4 md:col-span-2 md:flex-row'>
       <div className='flex flex-col'>
         <h2 className='font-bold text-lg'>Select Date & Time</h2>
         <Calendar
           mode='single'
           selected={date}
           onSelect={(date) => handleDateChange(date)}
-          className='rounded-md border mt-5'
+          className='rounded-md border mt-5 flex justify-center items-center'
           disabled={(date) => {
             //Disable past dates, but allow the current date
             const today = new Date();
