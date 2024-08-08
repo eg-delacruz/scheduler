@@ -11,11 +11,12 @@ type Props = {
   meeting: Meeting;
   selectedTime: string;
   date: Date | undefined;
+  formated_date?: string;
 };
 
-function MeetingInfo({ meeting, selectedTime, date }: Props) {
+function MeetingInfo({ meeting, selectedTime, date, formated_date }: Props) {
   return (
-    <div className='p-4 border-r'>
+    <div className='p-4 md:border-r'>
       <h2 className='text-2xl'>{meeting.organization_name}</h2>
       <h2 className='font-bold text-2xl'>
         {meeting.meeting_title ? meeting.meeting_title : 'Meeting Title'}
@@ -30,7 +31,9 @@ function MeetingInfo({ meeting, selectedTime, date }: Props) {
           {meeting.location_platform} Meeting
         </p>
         <p className='flex gap-2'>
-          <CalendarCheck /> {date && format(date, 'PPP')}
+          <CalendarCheck />{' '}
+          {/* Formated date will only be availabla if the meeting has been scheduled already */}
+          {formated_date ? formated_date : date && format(date, 'PPP')}
         </p>
         {selectedTime && (
           <p className='flex gap-2'>

@@ -26,7 +26,7 @@ type Props = {
   };
 };
 
-//TODO: If the meeting is already scheduled, show all the details and don't allow to do any changes. Even show a button to add the meeting to the google calendar
+//TODO: Add button to add to google calendar
 function ShareMeetingEvent({ params }: Props) {
   //States
   const [meeting, setMeeting] = useState<Meeting>();
@@ -88,7 +88,9 @@ function ShareMeetingEvent({ params }: Props) {
   }
 
   if (meeting?.status === 'scheduled') {
-    return <ScheduledMeetingView />;
+    return (
+      <ScheduledMeetingView meeting={meeting} justScheduled={justScheduled} />
+    );
   }
 
   if (meeting && organization)

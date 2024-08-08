@@ -43,7 +43,6 @@ type Props = {
   setJustScheduled: (justScheduled: boolean) => void;
 };
 
-//TODO: Create a last step saying thank you and that you will receive a confirmation email. Maybe change the local meeting.status property to scheduled and show the details of the meeting. Also create a boolean state in the page.tsx to display a message like "Your meeting has been scheduled. You will receive a confirmation email shortly" and pass its setter to this component (or to the component that submits the form)
 //TODO: check the mobile view of the component
 function MeetingTimeDateSelection({
   meeting,
