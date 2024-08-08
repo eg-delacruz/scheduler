@@ -11,6 +11,7 @@ import { Button } from '@shadcnComponents/button';
 //Utils
 import createTimeSlots from '@utils/createTimeSlots';
 
+//TODO: Improve the mobile view like in the /meeting/[meetingId]
 function PreviewMeeting({
   formValue,
   organization_start_time,

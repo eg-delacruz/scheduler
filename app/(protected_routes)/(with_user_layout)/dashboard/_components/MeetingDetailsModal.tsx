@@ -42,6 +42,7 @@ type Props = {
   meeting: Meeting;
 };
 
+//TODO: Improve the mobile separation between the appointee name and appointee email label and input
 function MeetingDetailsModal({ meeting }: Props) {
   //States
   const [open, setOpen] = useState(false);

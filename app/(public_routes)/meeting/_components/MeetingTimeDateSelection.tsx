@@ -22,6 +22,7 @@ import createTimeSlots from '@utils/createTimeSlots';
 import Plunk from '@plunk/node';
 import { render } from '@react-email/render';
 import { Email } from '@email/index';
+import { SchedulerUserConfirmationEmail } from '@email/SchedulerUserConfirmationEmail';
 
 //Firestore
 import {
@@ -47,9 +48,9 @@ type Props = {
   setMeeting: (meeting: Meeting) => void;
   setJustScheduled: (justScheduled: boolean) => void;
   organizationName: string;
+  organizationEmail: string;
 };
 
-//TODO: sent confirmation email to the organization owner
 function MeetingTimeDateSelection({
   meeting,
   days_available,
@@ -59,6 +60,7 @@ function MeetingTimeDateSelection({
   setMeeting,
   setJustScheduled,
   organizationName,
+  organizationEmail,
 }: Props) {
   //States
   const [date, setDate] = useState<Date>(new Date());
@@ -95,7 +97,6 @@ function MeetingTimeDateSelection({
 
   const db = getFirestore(app);
 
-  //TODO: test this when I already have some scheduled meetings
   const getPrevEventBooking = async (selectedDate: Date) => {
     const q = query(
       collection(db, 'Meeting'),
@@ -184,6 +185,7 @@ function MeetingTimeDateSelection({
     })
       .then(() => {
         sendConfirmationEmailToAppointee(appointeeName);
+        sendConfirmationEmailToOrganization(appointeeName);
         setMeeting(updatedMeeting);
         console.log('Document successfully updated!');
         toast('Meeting scheduled successfully!');
@@ -222,6 +224,35 @@ function MeetingTimeDateSelection({
         })
         .then((resp) => {
           console.log('Email sent to appointee');
+        });
+    }
+  };
+
+  const sendConfirmationEmailToOrganization = (appointeeName: string) => {
+    if (process.env.NEXT_PUBLIC_PLUNK_SECRET_API_KEY && date) {
+      const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_SECRET_API_KEY);
+
+      const emailHtml = render(
+        <SchedulerUserConfirmationEmail
+          appointeeName={appointeeName}
+          appointeeEmail={appointeeEmail}
+          appointeeNote={appointeeNote}
+          date={format(date, 'PPP').toString()}
+          meetingTime={selectedTime}
+          duration={meeting.duration}
+          meetingUrl={meeting.location_url_phone}
+          location_platform={meeting.location_platform}
+        />
+      );
+
+      plunk.emails
+        .send({
+          to: organizationEmail,
+          subject: `Meeting Schedule details | ${organizationName}`,
+          body: emailHtml,
+        })
+        .then((resp) => {
+          console.log('Email sent to organization');
         });
     }
   };
