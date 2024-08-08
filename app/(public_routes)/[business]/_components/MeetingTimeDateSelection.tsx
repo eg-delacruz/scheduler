@@ -148,38 +148,38 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }: Props) {
       userNote,
     }).then((response) => {
       toast('Meeting shceduled successfully!');
-      sendConfirmationEmailToUser(userName);
+      //sendConfirmationEmailToUser(userName);
       //TODO: sendConfirmationEmailToBusiness
       router.replace('/confirmation');
     });
   };
 
   //mailer
-  const sendConfirmationEmailToUser = (user: string) => {
-    if (process.env.NEXT_PUBLIC_PLUNK_SECRET_API_KEY && date) {
-      const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_SECRET_API_KEY);
-      const emailHtml = render(
-        <Email
-          businessName={businessInfo?.businessName}
-          date={format(date, 'PPP').toString()}
-          duration={eventInfo?.duration}
-          meetingTime={selectedTime}
-          meetingUrl={eventInfo?.locationUrl}
-          userFirstName={user}
-        />
-      );
+  // const sendConfirmationEmailToUser = (user: string) => {
+  //   if (process.env.NEXT_PUBLIC_PLUNK_SECRET_API_KEY && date) {
+  //     const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_SECRET_API_KEY);
+  //     const emailHtml = render(
+  //       <Email
+  //         businessName={businessInfo?.businessName}
+  //         date={format(date, 'PPP').toString()}
+  //         duration={eventInfo?.duration}
+  //         meetingTime={selectedTime}
+  //         meetingUrl={eventInfo?.locationUrl}
+  //         userFirstName={user}
+  //       />
+  //     );
 
-      plunk.emails
-        .send({
-          to: userEmail,
-          subject: `Meeting Schedule details | ${businessInfo?.businessName}`,
-          body: emailHtml,
-        })
-        .then((response: any) => {
-          console.log('Email sent to user');
-        });
-    }
-  };
+  //     plunk.emails
+  //       .send({
+  //         to: userEmail,
+  //         subject: `Meeting Schedule details | ${businessInfo?.businessName}`,
+  //         body: emailHtml,
+  //       })
+  //       .then((response: any) => {
+  //         console.log('Email sent to user');
+  //       });
+  //   }
+  // };
 
   return (
     <div

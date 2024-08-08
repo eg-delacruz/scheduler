@@ -18,6 +18,11 @@ import TimeDateSelection from './TimeDateSelection';
 //Utils
 import createTimeSlots from '@utils/createTimeSlots';
 
+//mailer
+import Plunk from '@plunk/node';
+import { render } from '@react-email/render';
+import { Email } from '@email/index';
+
 //Firestore
 import {
   getFirestore,
@@ -41,8 +46,10 @@ type Props = {
   end_time: string;
   setMeeting: (meeting: Meeting) => void;
   setJustScheduled: (justScheduled: boolean) => void;
+  organizationName: string;
 };
 
+//TODO: sent confirmation email to the organization owner
 function MeetingTimeDateSelection({
   meeting,
   days_available,
@@ -51,6 +58,7 @@ function MeetingTimeDateSelection({
   start_time,
   setMeeting,
   setJustScheduled,
+  organizationName,
 }: Props) {
   //States
   const [date, setDate] = useState<Date>(new Date());
@@ -175,9 +183,9 @@ function MeetingTimeDateSelection({
       modified_by: appointeeEmail,
     })
       .then(() => {
+        sendConfirmationEmailToAppointee(appointeeName);
         setMeeting(updatedMeeting);
         console.log('Document successfully updated!');
-        //TODO: send confirmation email
         toast('Meeting scheduled successfully!');
         setJustScheduled(true);
       })
@@ -188,6 +196,33 @@ function MeetingTimeDateSelection({
       .finally(() => {
         setScheduling(false);
       });
+  };
+
+  //mailer
+  const sendConfirmationEmailToAppointee = (appointeeName: string) => {
+    if (process.env.NEXT_PUBLIC_PLUNK_SECRET_API_KEY && date) {
+      const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_SECRET_API_KEY);
+      const emailHtml = render(
+        <Email
+          organizationName={organizationName}
+          date={format(date, 'PPP').toString()}
+          duration={meeting.duration}
+          meetingTime={selectedTime}
+          meetingUrl={meeting.location_url_phone}
+          appointeeName={appointeeName}
+        />
+      );
+
+      plunk.emails
+        .send({
+          to: appointeeEmail,
+          subject: `Meeting Schedule details | ${organizationName}`,
+          body: emailHtml,
+        })
+        .then((resp) => {
+          console.log('Email sent to appointee');
+        });
+    }
   };
 
   return (

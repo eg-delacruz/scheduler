@@ -14,25 +14,24 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 
-//TODO: properly type
 //TODO: properly get images from server (like the logo) when the app is in production
 //TODO: properly format everything once the app is in production
 interface Props {
-  userFirstName: string;
-  duration: any;
-  meetingTime: any;
-  date: any;
-  meetingUrl: any;
-  businessName: any;
+  appointeeName: string;
+  duration: number;
+  meetingTime: string;
+  date: string;
+  meetingUrl: string;
+  organizationName: string;
 }
 
 export const Email = ({
-  userFirstName,
+  appointeeName,
   duration,
   meetingTime,
   date,
   meetingUrl,
-  businessName,
+  organizationName,
 }: Props) => {
   return (
     <Html>
@@ -70,7 +69,7 @@ export const Email = ({
                     textAlign: 'center',
                   }}
                 >
-                  Hi {userFirstName},
+                  Hi {appointeeName},
                 </Heading>
                 <Heading
                   as='h2'
@@ -80,7 +79,7 @@ export const Email = ({
                     textAlign: 'center',
                   }}
                 >
-                  Thank you for scheduling a meeting with {businessName},
+                  Thank you for scheduling a meeting with {organizationName},
                 </Heading>
 
                 <Text>Please find the meeting details:</Text>
@@ -148,10 +147,10 @@ export const Email = ({
 };
 
 Email.PreviewProps = {
-  userFirstName: 'Alan',
-  businessName: 'El Portal',
+  appointeeName: 'Alan',
+  organizationName: 'El Portal',
   date: 'Today',
-  duration: '30 min',
+  duration: 30,
   meetingTime: '8 pm',
   meetingUrl: 'https://www.zoom.com',
 } as Props;

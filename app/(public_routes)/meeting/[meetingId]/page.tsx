@@ -103,6 +103,7 @@ function ShareMeetingEvent({ params }: Props) {
         end_time={organization.end_time}
         start_time={organization.start_time}
         setJustScheduled={setJustScheduled}
+        organizationName={organization.name}
       />
     );
 }
