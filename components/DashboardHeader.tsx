@@ -19,6 +19,7 @@ import {
 } from '@shadcnComponents/dropdown-menu';
 import { Skeleton } from '@shadcnComponents/skeleton';
 
+//TODO: add the profile options to the dropdown menu and create the page for that. There, create a delete account button.
 function DashboardHeader() {
   const { user } = useKindeBrowserClient();
   return (

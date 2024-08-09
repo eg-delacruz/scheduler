@@ -1,25 +1,3 @@
-//TODO: erase this interface
-interface BusinessInfo {
-  businessName: string;
-  daysAvailable: { [day: string]: string };
-  email: string;
-  endTime: string;
-  startTime: string;
-  userName: string;
-}
-
-//TODO: erase this interface
-interface MeetingEvent {
-  businesssId: unknown;
-  createdBy: string;
-  duration: number;
-  eventName: string;
-  id: string;
-  locationType: string;
-  locationUrl: string;
-  themeColor: string;
-}
-
 interface KindeUser {
   id: string;
   email: string | null;

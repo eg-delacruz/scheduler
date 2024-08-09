@@ -20,6 +20,7 @@ import {
 
 //TODO: When clicking on the create button, redirect to /organizations if no organization is created. Otherwise, redirect to /create-meeting. Also, check if the amount of meetings is greater than 20, so that it displays a message saying that the user needs to delete some.
 //TODO: Replace the logo everywere with the new one
+//TODO: work on the mobile version of the sidebar
 function SideNavBar() {
   const menu = [
     {
@@ -33,12 +34,6 @@ function SideNavBar() {
       name: 'Organizations',
       path: '/organizations',
       icon: Building,
-    },
-    {
-      id: 4,
-      name: 'Scheduled Meeting',
-      path: '/dashboard/scheduled-meeting',
-      icon: Calendar,
     },
   ];
 
