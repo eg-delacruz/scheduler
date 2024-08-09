@@ -24,6 +24,7 @@ interface Props {
   location_platform: string;
 }
 
+//TODO: add the meeting url to let the user check the meeting details
 export const Email = ({
   appointeeName,
   duration,

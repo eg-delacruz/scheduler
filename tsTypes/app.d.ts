@@ -11,6 +11,7 @@ interface SchedulerUser {
   id: string;
   email: string | null;
   created_at: Date;
+  formated_created_at: string;
   organizations: Organization[];
   current_organization: Organization | null;
 }
