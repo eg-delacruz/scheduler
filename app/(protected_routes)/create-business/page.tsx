@@ -15,7 +15,7 @@ import { getFirestore, doc, setDoc } from 'firebase/firestore';
 //Auth
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 
-//TODO: 1. Instead of creating a business, create an 'organization' ask for the type (business or personal) and for the name (placeholder: 'Namo of your organization or personal name'). Don´t ask here for the email to avoid having it twice (user and organization). Ask here for the daysAvailable, startTime and EndTime
+//TODO: erase this route
 
 function CreateBusiness() {
   const [businessName, setBusinessName] = useState<string>('');

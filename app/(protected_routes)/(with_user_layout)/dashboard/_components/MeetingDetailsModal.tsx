@@ -292,8 +292,9 @@ function MeetingDetailsModal({ meeting }: Props) {
           <hr />
         </div>
 
+        {/* MARK: Appointee Details */}
         <h3 className='font-bold'>Appointee Details</h3>
-        <div className='flex justify-start flex-col sm:flex-row sm:justify-between'>
+        <div className='flex justify-start flex-col gap-3 sm:flex-row sm:justify-between'>
           <div>
             <p className='font-bold'>Name</p>
             <p className='min-w-40 min-h-10 rounded-md border flex items-center p-2 cursor-not-allowed'>

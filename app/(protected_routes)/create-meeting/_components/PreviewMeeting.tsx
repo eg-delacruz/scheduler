@@ -11,7 +11,6 @@ import { Button } from '@shadcnComponents/button';
 //Utils
 import createTimeSlots from '@utils/createTimeSlots';
 
-//TODO: Improve the mobile view like in the /meeting/[meetingId]
 function PreviewMeeting({
   formValue,
   organization_start_time,
@@ -64,7 +63,7 @@ function PreviewMeeting({
             </div>
           </div>
         </div>
-        <div className='grid grid-cols-1 md:grid-cols-3 mt-5'>
+        <div className='grid grid-cols-1 md:grid-cols-4 mt-5'>
           {/* Meeting info */}
           <div className='p-4 border-r'>
             <p className='font-bold'>{formValue?.organizationName}</p>
@@ -80,8 +79,6 @@ function PreviewMeeting({
                 <MapPin />
                 {formValue?.locationType} Meeting
               </p>
-              {/* TODO: Use a instead of link to avoid error when typing https:// in production. If error persists, just use a normal p and style it to make it look like a URL */}
-              {/* TODO: Erase this TODO after making sure the error doesn't ocure in production */}
               <a
                 className='text-primary text-ellipsis block whitespace-nowrap overflow-hidden'
                 href={formValue?.locationUrl ?? ''}
@@ -92,14 +89,14 @@ function PreviewMeeting({
           </div>
 
           {/* Time and Date Selection */}
-          <div className='md:col-span-2 flex px-4'>
+          <div className='flex px-4 flex-col md:flex-row md:col-span-3 '>
             <div className='flex flex-col'>
               <h2 className='font-bold text-lg'>Select Date & Time</h2>
               <Calendar
                 mode='single'
                 selected={date}
                 onSelect={setDate}
-                className='rounded-md border mt-5'
+                className='rounded-md border mt-5 flex justify-center items-center'
                 disabled={(date) => {
                   //Disable past dates, but allow the current date
                   const today = new Date();
