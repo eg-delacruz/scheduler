@@ -1,3 +1,4 @@
+//TODO: erase this interface
 interface BusinessInfo {
   businessName: string;
   daysAvailable: { [day: string]: string };
@@ -7,6 +8,7 @@ interface BusinessInfo {
   userName: string;
 }
 
+//TODO: erase this interface
 interface MeetingEvent {
   businesssId: unknown;
   createdBy: string;

@@ -26,7 +26,7 @@ import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 
 import { format } from 'date-fns/format';
 
-//TODO: add the 'expired' meetings in the second tab
+//TODO: erase this route and everything inside scheduled-meeting folder
 function ScheduledMeeting() {
   //States
   //TODO: properly type this

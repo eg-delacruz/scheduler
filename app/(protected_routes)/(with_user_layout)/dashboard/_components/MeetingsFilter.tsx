@@ -61,7 +61,6 @@ function MeetingsFilter({
     (organization) => organization.id !== SchedulerUser.current_organization?.id
   );
 
-  //TODO: set all colors to true and all states to its default value when current organization changes (at the very end of the function)
   const handleCurrentOrganization = async (organization: Organization) => {
     setLoading(true);
     if (SchedulerUser?.email) {
@@ -157,7 +156,10 @@ function MeetingsFilter({
           <TabsList>
             <TabsTrigger
               disabled={loading}
-              onClick={() => setScheduled(true)}
+              onClick={() => {
+                setScheduled(true);
+                setExpiration('Upcoming');
+              }}
               value='Scheduled'
             >
               Scheduled
