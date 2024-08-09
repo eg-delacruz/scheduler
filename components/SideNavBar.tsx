@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 
 //TODO: When clicking on the create button, redirect to /organizations if no organization is created. Otherwise, redirect to /create-meeting. Also, check if the amount of meetings is greater than 20, so that it displays a message saying that the user needs to delete some.
+//TODO: Replace the logo everywere with the new one
 function SideNavBar() {
   const menu = [
     {
@@ -34,28 +35,10 @@ function SideNavBar() {
       icon: Building,
     },
     {
-      id: 3,
-      name: 'Meeting Type',
-      path: '/dashboard/meeting-type',
-      icon: Briefcase,
-    },
-    {
       id: 4,
       name: 'Scheduled Meeting',
       path: '/dashboard/scheduled-meeting',
       icon: Calendar,
-    },
-    {
-      id: 5,
-      name: 'Availability',
-      path: '/dashboard/availability',
-      icon: Clock,
-    },
-    {
-      id: 6,
-      name: 'Settings',
-      path: '/dashboard/settings',
-      icon: Settings,
     },
   ];
 
