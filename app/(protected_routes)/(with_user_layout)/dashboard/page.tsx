@@ -19,7 +19,6 @@ import ThemeColor from '@utils/ThemeOptions';
 
 import { format } from 'date-fns/format';
 
-//TODO: give a cool animation to the meeting list when changing the filters
 function Dashboard() {
   //User
   const { loadingSchedulerUser, SchedulerUser } = useSetSchedulerUser();

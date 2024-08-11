@@ -1,5 +1,8 @@
 'use client';
 
+//Animations
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+
 //Schadcn components
 import { Skeleton } from '@shadcnComponents/skeleton';
 
@@ -29,6 +32,9 @@ function MeetingList({
   current_organization_id,
   total_current_meetings,
 }: Props) {
+  //Animate list of activities
+  const [animationParent] = useAutoAnimate();
+
   const onCopyClickHandler = (meeting: Meeting) => {
     const meetingEventLink =
       process.env.NEXT_PUBLIC_BASE_URL + 'meeting/' + meeting.id;
@@ -128,7 +134,10 @@ function MeetingList({
 
   return (
     <>
-      <div className='mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7'>
+      <div
+        ref={animationParent}
+        className='mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7'
+      >
         {meetings.map((meeting) => (
           <div
             style={{ borderTopColor: meeting.theme_color }}
