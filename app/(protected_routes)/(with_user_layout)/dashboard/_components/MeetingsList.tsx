@@ -1,8 +1,10 @@
+'use client';
+
 //Schadcn components
 import { Skeleton } from '@shadcnComponents/skeleton';
 
 //Icons
-import { Clock, Copy, MapPin, Calendar } from 'lucide-react';
+import { Clock, Copy, MapPin } from 'lucide-react';
 
 //Components
 import DeleteMeetingModal from './DeleteMeetingModal';
@@ -18,7 +20,7 @@ type Props = {
 
 import { toast } from 'sonner';
 
-//TODO: Add a button that allows to add the meeting to google calendar. It should display a modal and only when the meeting is scheduled
+//TODO: Possibility in the future: add a google calendar button to add the meeting to the user's google calendar
 
 function MeetingList({
   meetings,
@@ -35,6 +37,56 @@ function MeetingList({
   };
 
   const meetings_organization_id = meetings[0]?.organization_id;
+
+  //Google Calendar API (leave here in case we want to add the feature in the future)
+
+  const handleAddToGoogleCalendar = async (meeting: Meeting) => {
+    //Transform the meeting date to Date.toISOString() format
+    const date_seconds_timestamp =
+      (meeting.date as unknown as { seconds: number }).seconds * 1000;
+    const created_at_date_nano_timestamp = meeting.date as unknown as {
+      nanoseconds: number;
+    };
+    const unixTimestamp =
+      date_seconds_timestamp + Number(created_at_date_nano_timestamp) / 1000000;
+    const formated_date = new Date(unixTimestamp);
+
+    const duration = meeting.duration;
+
+    //Add the time to the date
+    let [hours, minutes_with_period] = meeting.time.split(':');
+    let [minutes, period] = minutes_with_period.split(' ');
+
+    let number_hours = parseInt(hours);
+    let number_minutes = parseInt(minutes);
+
+    if (period === 'PM' && hours !== '12') number_hours += 12;
+    if (hours === '12' && period === 'AM') number_hours = 24;
+
+    formated_date.setHours(number_hours);
+    formated_date.setMinutes(number_minutes);
+    formated_date.setSeconds(0);
+    formated_date.setMilliseconds(0);
+
+    //Transform the date to ISOString but with my current timezone
+    const start_time = formated_date.toISOString();
+    const end_time = new Date(
+      formated_date.getTime() + duration * 60000
+    ).toISOString();
+
+    const event = {
+      summary: meeting.meeting_title,
+      description: `Meeting between ${meeting.appointee_name} and ${meeting.organization_name}`,
+      start: {
+        dateTime: start_time,
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      },
+      end: {
+        dateTime: end_time,
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      },
+    };
+  };
 
   if (
     loadingMeetings ||
@@ -122,9 +174,15 @@ function MeetingList({
               </p>
 
               <div className='flex gap-1'>
-                {meeting.status === 'scheduled' && (
-                  <Calendar className='cursor-pointer p-1 w-7 h-7 rounded-sm hover:bg-blue-500 hover:text-white' />
-                )}
+                {/* {meeting.status === 'scheduled' && (
+                  <Calendar
+                    className='cursor-pointer p-1 w-7 h-7 rounded-sm hover:bg-blue-500 hover:text-white'
+                    id='add_manual_event'
+                    onClick={() => {
+                      handleAddToGoogleCalendar(meeting);
+                    }}
+                  />
+                )} */}
                 <DeleteMeetingModal meeting={meeting} />
               </div>
             </div>

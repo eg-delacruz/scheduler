@@ -52,6 +52,7 @@ function Dashboard() {
   const colors = [color1, color2, color3, color4, color5];
   const setColors = [setColor1, setColor2, setColor3, setColor4, setColor5];
 
+  //TODO: If there are no Scheduled meetings, the default value should be false. Also check this in the MeetingsFilter component to set the default value tab. Check this with a useEffect that monitors the CurrentMeetings state
   const [scheduled, setScheduled] = useState<boolean>(true);
 
   const [expiration, setExpiration] = useState<'All' | 'Upcoming' | 'Expired'>(

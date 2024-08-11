@@ -26,7 +26,7 @@ type Props = {
   };
 };
 
-//TODO: Add button to add to google calendar
+//TODO: Possibility in the future: add a google calendar button to add the meeting to the user's google calendar
 function ShareMeetingEvent({ params }: Props) {
   //States
   const [meeting, setMeeting] = useState<Meeting>();

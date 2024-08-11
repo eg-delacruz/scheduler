@@ -9,14 +9,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@shadcnComponents/button';
 
 //This library is installed when we install the shadcn UI lib
-import {
-  Briefcase,
-  Calendar,
-  Clock,
-  Plus,
-  Settings,
-  Building,
-} from 'lucide-react';
+import { Calendar, Plus, Building } from 'lucide-react';
 
 //TODO: When clicking on the create button, redirect to /organizations if no organization is created. Otherwise, redirect to /create-meeting. Also, check if the amount of meetings is greater than 20, so that it displays a message saying that the user needs to delete some.
 //TODO: Replace the logo everywere with the new one
@@ -50,9 +43,11 @@ function SideNavBar() {
         <Image
           src='/logo.png'
           width={150}
-          height={150}
+          height={0}
           alt='Logo'
           className='mt-3'
+          priority
+          style={{ height: 'auto' }}
         />
       </Link>
 

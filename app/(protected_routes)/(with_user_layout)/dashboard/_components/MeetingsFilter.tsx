@@ -179,7 +179,7 @@ function MeetingsFilter({
 
       {scheduled && (
         <div className='my-2'>
-          <Tabs defaultValue='Upcoming'>
+          <Tabs defaultValue='All'>
             <TabsList>
               <TabsTrigger
                 disabled={loading}
