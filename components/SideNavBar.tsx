@@ -11,10 +11,16 @@ import { Button } from '@shadcnComponents/button';
 //This library is installed when we install the shadcn UI lib
 import { Calendar, Plus, Building } from 'lucide-react';
 
-//TODO: When clicking on the create button, redirect to /organizations if no organization is created. Otherwise, redirect to /create-meeting. Also, check if the amount of meetings is greater than 20, so that it displays a message saying that the user needs to delete some.
-//TODO: Replace the logo everywere with the new one
+//Hooks
+import useSetSchedulerUser from '@hooks/useSetSchedulerUser';
+
+//Components
+import SpinnerLoader from '@components/SpinnerLoader';
+
 //TODO: work on the mobile version of the sidebar
 function SideNavBar() {
+  const { loadingSchedulerUser, SchedulerUser } = useSetSchedulerUser();
+
   const menu = [
     {
       id: 1,
@@ -51,11 +57,28 @@ function SideNavBar() {
         />
       </Link>
 
-      <Link href={'/create-meeting'}>
-        <Button className='flex gap-2 w-full rounded-full mt-10'>
-          {' '}
-          <Plus />
-          Create
+      <Link
+        href={`${
+          loadingSchedulerUser
+            ? '/dashboard'
+            : SchedulerUser?.organizations.length === 0
+            ? '/organizations'
+            : '/create-meeting'
+        }`}
+      >
+        <Button
+          disabled={loadingSchedulerUser}
+          className='flex gap-2 w-full rounded-full mt-10'
+        >
+          {loadingSchedulerUser ? (
+            <SpinnerLoader />
+          ) : (
+            <>
+              {' '}
+              <Plus />
+              Create
+            </>
+          )}
         </Button>
       </Link>
 
