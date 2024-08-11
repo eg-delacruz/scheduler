@@ -34,7 +34,7 @@ type Props = {
   organization_id?: string;
 };
 
-//TODO: add an option to delete the expired meetings after one month
+//TODO: in the future, add an option to delete the expired meetings after one month
 function CreateEditModal({ action, triggerElement, organization_id }: Props) {
   //Context
   const { SchedulerUser, setSchedulerUser } = useAppContext();
