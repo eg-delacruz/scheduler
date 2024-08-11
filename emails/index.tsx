@@ -22,9 +22,9 @@ interface Props {
   meetingUrl: string;
   organizationName: string;
   location_platform: string;
+  meeting_id: string;
 }
 
-//TODO: add the meeting url to let the user check the meeting details
 export const Email = ({
   appointeeName,
   duration,
@@ -33,6 +33,7 @@ export const Email = ({
   meetingUrl,
   organizationName,
   location_platform,
+  meeting_id,
 }: Props) => {
   return (
     <Html>
@@ -90,6 +91,15 @@ export const Email = ({
                   <b>duration: </b>
                   {duration} minutes
                 </Text>
+                <Text style={{ ...paragraph, marginTop: -5 }}>
+                  <b>Meeting details URL: </b>
+                  <a
+                    href={`https://scheduler-six-mu.vercel.app/meeting/${meeting_id}`}
+                    target='_blank'
+                  >
+                    https://scheduler-six-mu.vercel.app/meeting/{meeting_id}
+                  </a>
+                </Text>
                 <Text
                   style={{
                     color: 'rgb(0,0,0, 0.5)',
@@ -141,6 +151,7 @@ export const Email = ({
   );
 };
 
+//Used to preview the email with dummy data
 Email.PreviewProps = {
   appointeeName: 'Alan',
   organizationName: 'El Portal',
@@ -149,6 +160,7 @@ Email.PreviewProps = {
   meetingTime: '8 pm',
   meetingUrl: '6545313',
   location_platform: 'Phone',
+  meeting_id: 'campuscanvas-1723221707713',
 } as Props;
 
 export default Email;

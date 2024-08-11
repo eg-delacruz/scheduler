@@ -213,6 +213,7 @@ function MeetingTimeDateSelection({
           meetingUrl={meeting.location_url_phone}
           appointeeName={appointeeName}
           location_platform={meeting.location_platform}
+          meeting_id={meeting.id}
         />
       );
 
