@@ -68,9 +68,9 @@ function Hero() {
             </LoginLink>
           </div>
           <hr className='border-stone-700 opacity-80 w-[200px] mx-auto' />
-          <h2>
+          <p>
             <LoginLink className='text-primary'>Sign up with Email</LoginLink>
-          </h2>
+          </p>
         </div>
       </div>
     </section>

@@ -1,0 +1,35 @@
+.menuIcon {
+  top: 10px;
+  left: 10px;
+  background-color: #e5e7eb;
+  opacity: 0.95;
+}
+.closeMenuIcon {
+  top: 16px;
+  right: 16px;
+  border: 2px solid black;
+}
+.menu {
+  z-index: 20;
+  background-color: hsla(210, 40%, 98%, 0.9);
+  transition: 0.3s;
+  left: 0;
+  backdrop-filter: blur(4px);
+}
+
+.hideMenu {
+  left: -100vw;
+}
+
+//From 768px and above
+@media (min-width: 768px) {
+  .menuIcon {
+    display: none;
+  }
+  .closeMenuIcon {
+    display: none;
+  }
+  .menu {
+    left: 0;
+  }
+}
