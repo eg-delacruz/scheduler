@@ -10,7 +10,7 @@ import small_orange_particle from '@assets/images/small_orange_girl_particle.svg
 function AnimatedStandingGirl() {
   return (
     <div
-      className={`hidden lg:block absolute -z-10 xl:right-36 lg:right-6  bottom-32 w-96`}
+      className={`hidden 2xl:block absolute -z-10 xl:right-36 lg:right-6  bottom-32 w-96`}
     >
       <Image
         src='/images/home/standing_girl.svg'
