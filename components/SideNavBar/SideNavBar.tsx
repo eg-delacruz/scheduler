@@ -42,8 +42,6 @@ function SideNavBar() {
   const [activePath, setActivePath] = useState(path);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
-  console.log({ showMobileMenu });
-
   useEffect(() => {
     path && setActivePath(path);
   }, [path]);
@@ -64,7 +62,7 @@ function SideNavBar() {
       <div
         className={`${styles.menu} ${
           !showMobileMenu && styles.hideMenu
-        } bg-slate-50 h-screen fixed w-full md:block md:w-64`}
+        } bg-slate-50 h-screen fixed w-full md:block`}
       >
         <div
           className={`absolute text-black rounded-full cursor-pointer border-black ${styles.closeMenuIcon}`}
